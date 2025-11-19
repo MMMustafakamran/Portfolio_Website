@@ -428,32 +428,57 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* --- 3. PROJECTS (2x1) --- */}
+        {/* --- 3. PROJECTS (wide feature) --- */}
         <div 
           onClick={() => toggleTile('projects')}
-          className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-500 fade-in-up delay-200 cursor-pointer"
+          className="col-span-1 md:col-span-4 md:row-span-2 bg-gradient-to-br from-neutral-900 via-neutral-900/70 to-neutral-900/40 border border-neutral-800 rounded-3xl p-8 relative overflow-hidden group fade-in-up delay-200 cursor-pointer"
         >
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="absolute inset-0 opacity-40 group-hover:opacity-70 transition-opacity duration-500 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_60%)]"></div>
+          <div className="absolute -bottom-12 -right-10 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full opacity-40"></div>
           
-          <div className="flex justify-between items-start relative z-10">
-            <div className="bg-emerald-500/10 p-2.5 rounded-xl text-emerald-400 ring-1 ring-emerald-500/20">
-              <BrainCircuit size={24} />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-semibold tracking-[0.4em] uppercase text-emerald-300/70">Selected Work</p>
+                <h3 className="text-3xl md:text-4xl font-bold text-white mt-2">Projects</h3>
+                <p className="text-neutral-400 text-sm mt-2 max-w-3xl">
+                  AI-first platforms, automation pipelines, and systems shipped end-to-end. Tap to read deeper case studies for ParhaiPartner, Library System, Job Portal and more.
+                </p>
+              </div>
+              <div className="bg-neutral-900/70 px-4 py-1.5 rounded-full text-xs text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                View All <ArrowUpRight size={12} />
+              </div>
             </div>
-            <div className="bg-neutral-800/50 backdrop-blur px-3 py-1 rounded-full text-xs text-neutral-300 border border-neutral-700 flex items-center gap-1 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors">
-              View Projects <ArrowUpRight size={12} />
-            </div>
-          </div>
 
-          <div className="relative z-10 mt-4">
-            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Projects</h3>
-            <p className="text-neutral-400 text-sm mb-4 max-w-lg">
-              AI-first platforms, automation pipelines, and tooling shipped end-to-end. Highlight: ParhaiPartner, Library Management System, Job Portal.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {['ParhaiPartner', 'Library System', 'Job Portal'].map(tag => (
-                <span key={tag} className="px-2 py-1 bg-neutral-800 rounded-md text-xs text-neutral-300 font-mono border border-neutral-700/50">
-                  {tag}
-                </span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {projectItems.slice(0, 3).map((project, idx) => (
+                <div 
+                  key={project.title}
+                  className="bg-neutral-950/60 border border-neutral-800 rounded-2xl p-4 flex flex-col gap-3 hover:border-emerald-500/40 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-300">
+                      {idx === 0 ? <BrainCircuit size={18}/> : idx === 1 ? <Library size={18}/> : <Monitor size={18}/>}
+                    </div>
+                    <div>
+                      <p className="text-white text-sm font-semibold">{project.title}</p>
+                      <p className="text-[11px] text-emerald-300/80 uppercase tracking-[0.3em]">Build</p>
+                    </div>
+                  </div>
+                  <p className="text-[12px] text-neutral-500 leading-relaxed line-clamp-3">
+                    {project.headline}
+                  </p>
+                  <div className="flex flex-wrap gap-1 text-[10px] text-neutral-400">
+                    {project.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 bg-neutral-900 rounded-full border border-neutral-800">
+                        {tag}
+                      </span>
+                    ))}
+                    {project.tags.length > 3 && (
+                      <span className="px-2 py-0.5 border border-neutral-800 rounded-full">+{project.tags.length - 3}</span>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -489,25 +514,7 @@ const Portfolio = () => {
            <div className="absolute right-0 top-12 bottom-0 w-12 bg-gradient-to-l from-neutral-900 to-transparent pointer-events-none"></div>
         </div>
 
-        {/* --- 5. SECONDARY PROJECT (1x1) --- */}
-        <div 
-          onClick={() => toggleTile('projects')}
-          className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-rose-500/50 transition-colors fade-in-up delay-400 hover:bg-neutral-900 cursor-pointer"
-        >
-          <div className="flex justify-between">
-            <div className="bg-rose-500/10 w-fit p-2 rounded-lg text-rose-400">
-              <Library size={20} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-600 group-hover:text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-white group-hover:text-rose-400 transition-colors">Library System</h3>
-            <p className="text-xs text-neutral-500 mt-1">Flask, SQLite & REST APIs.</p>
-            <p className="text-[10px] text-neutral-600 mt-2">90% Code Coverage</p>
-          </div>
-        </div>
-
-        {/* --- 6. SOCIAL LINKS (1x1) --- */}
+        {/* --- 5. SOCIAL LINKS (1x1) --- */}
         <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-center gap-3 fade-in-up delay-400">
           <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between bg-neutral-800/50 p-3 rounded-2xl hover:bg-white hover:text-black transition-all duration-300 group border border-transparent hover:border-neutral-200">
             <div className="flex items-center gap-3">
@@ -525,21 +532,21 @@ const Portfolio = () => {
           </a>
         </div>
 
-        {/* --- 7. CONTACT CTA (2x1) --- */}
+        {/* --- 6. CONTACT CTA (compact) --- */}
         <a 
           href="mailto:mmustafakamran@gmail.com" 
-          className="col-span-1 md:col-span-2 bg-indigo-600 rounded-3xl p-8 flex items-center justify-between relative overflow-hidden group fade-in-up delay-500 cursor-pointer hover:bg-indigo-700 transition-colors"
+          className="col-span-1 md:col-span-1 bg-indigo-600 rounded-3xl p-4 flex items-center justify-between gap-4 relative overflow-hidden group fade-in-up delay-500 cursor-pointer hover:bg-indigo-700 transition-colors"
         >
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-          <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors"></div>
+          <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
           
           <div className="relative z-10">
-            <h2 className="text-2xl font-bold text-white mb-1">Let's work together.</h2>
-            <p className="text-indigo-200 text-sm font-medium">Open for Fall 2025 Opportunities.</p>
+            <h2 className="text-lg font-bold text-white mb-0.5">Let's collaborate</h2>
+            <p className="text-indigo-200 text-[11px] font-medium tracking-wide uppercase">Fall 2025 roles</p>
           </div>
 
-          <div className="relative z-10 bg-white text-indigo-600 p-4 rounded-full hover:scale-110 transition-transform shadow-xl">
-            <Mail size={24} />
+          <div className="relative z-10 bg-white text-indigo-600 p-2.5 rounded-2xl hover:scale-110 transition-transform shadow-xl">
+            <Mail size={18} />
           </div>
         </a>
 
