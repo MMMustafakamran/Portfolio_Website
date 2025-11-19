@@ -9,6 +9,9 @@ import ProjectsTile from './components/ProjectsTile';
 import StackTile from './components/StackTile';
 import SocialTile from './components/SocialTile';
 import ContactTile from './components/ContactTile';
+import SpotifyTile from './components/SpotifyTile';
+import HobbiesTile from './components/HobbiesTile';
+import LocationTile from './components/LocationTile';
 import DetailModal from './components/DetailModal';
 
 const Portfolio = () => {
@@ -225,7 +228,7 @@ const Portfolio = () => {
       )
     },
     contact: {
-      badge: 'Let's Talk',
+      badge: 'Let\'s Talk',
       title: 'Contact',
       subtitle: 'Reach out for collaborations, internships, or freelance gigs.',
       accent: 'bg-gradient-to-r from-indigo-500 via-violet-500 to-transparent',
@@ -295,13 +298,16 @@ const Portfolio = () => {
 
       <div className="max-w-7xl mx-auto relative z-10 mt-20 md:mt-24">
         <LayoutGroup>
-          <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 md:gap-6 auto-rows-[180px]">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[180px]">
             <HeroTile onOpen={setSelectedTile} toggleProfile={() => setSelectedTile('profile')} />
             <ExperienceTile onOpen={setSelectedTile} items={experienceItems} />
             <ProjectsTile onOpen={setSelectedTile} items={projectItems} />
             <StackTile onOpen={setSelectedTile} />
             <SocialTile />
             <ContactTile onOpen={setSelectedTile} />
+            <SpotifyTile />
+            <HobbiesTile />
+            <LocationTile />
           </div>
         </LayoutGroup>
       </div>
