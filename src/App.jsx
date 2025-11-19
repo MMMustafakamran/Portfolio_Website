@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LayoutGroup, motion } from 'framer-motion';
 import { Github, Mail, Globe, GraduationCap, Code2, Server, Database, HardDrive, Monitor, ArrowUpRight } from 'lucide-react';
 
+import Navbar from './components/Navbar';
 import HeroTile from './components/HeroTile';
 import ExperienceTile from './components/ExperienceTile';
 import ProjectsTile from './components/ProjectsTile';
@@ -295,6 +296,8 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative">
+      <Navbar selectedTile={selectedTile} onSelect={setSelectedTile} />
+
       {/* Global Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-noise"></div>
@@ -302,7 +305,7 @@ const Portfolio = () => {
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] opacity-50"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 mt-20 md:mt-24">
         <LayoutGroup>
           <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 md:gap-6 auto-rows-[180px]">
             <HeroTile onOpen={setSelectedTile} toggleProfile={() => setSelectedTile('profile')} />
