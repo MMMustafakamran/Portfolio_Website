@@ -96,6 +96,38 @@ const Portfolio = () => {
     }
   ];
 
+  const projectItems = [
+    {
+      title: 'ParhaiPartner',
+      headline: 'AI-powered academic workspace with 500+ users.',
+      tags: ['React', 'Django REST', 'PostgreSQL', 'LLMs', 'RAG', 'RBAC'],
+      bullets: [
+        'Full-stack platform with JWT auth, multi-role RBAC, and async content generation workers.',
+        'Retrieval-Augmented Generation tutor that ingests course material to craft quizzes and study plans.',
+        'Teacher validation workflow reduced AI content errors by 85% and keeps academic integrity intact.'
+      ]
+    },
+    {
+      title: 'Library Management System',
+      headline: 'Flask + SQLite system streamlining book circulation.',
+      tags: ['Flask', 'SQLite', 'REST APIs', 'PyTest', 'Agile'],
+      bullets: [
+        'Designed REST endpoints for CRUD operations with policy-based authorization layers.',
+        'Achieved 90% automated test coverage via PyTest + Playwright integration suites.',
+        'Led 3-person scrum team, owning sprint planning and Git-based release workflow.'
+      ]
+    },
+    {
+      title: 'Job Portal',
+      headline: 'JavaFX desktop portal built on MVC architecture.',
+      tags: ['JavaFX', 'MVC', 'MySQL', 'CI/CD'],
+      bullets: [
+        'Implemented applicant & recruiter dashboards with filtering, approvals, and analytics.',
+        'Optimized SQL queries and caching to cut listing load time by 40%.'
+      ]
+    }
+  ];
+
   const detailContent = {
     profile: {
       badge: 'Profile Insight',
@@ -163,53 +195,36 @@ const Portfolio = () => {
         </div>
       ]
     },
-    'project-parhai': {
-      badge: 'Case Study',
-      title: 'ParhaiPartner',
-      subtitle: 'AI-powered academic platform serving 500+ students, mentors, and counsellors.',
-      accent: 'bg-gradient-to-r from-emerald-500/20 via-transparent to-teal-500/10',
+    projects: {
+      badge: 'Case Studies',
+      title: 'Projects',
+      subtitle: 'A sampling of AI, automation, and platform builds.',
+      accent: 'bg-gradient-to-r from-emerald-500/20 via-transparent to-sky-500/20',
       body: [
-        <div key="parhai" className="space-y-6">
-          <div className="flex flex-wrap gap-2">
-            {['React', 'Django REST', 'PostgreSQL', 'LLMs', 'RAG', 'JWT', 'RBAC'].map(tag => (
-              <span key={tag} className="px-3 py-1 bg-neutral-800 rounded-lg text-sm border border-neutral-700 text-neutral-200">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <p className="text-neutral-200">
-            ParhaiPartner connects students, teachers, and counsellors in one workspace. I led the system design, AI integration, and delivery.
-          </p>
-          <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-300">
-            <li><strong>LLM Tutor:</strong> Retrieval-Augmented Generation ingesting course material to craft quizzes, summaries, and study plans.</li>
-            <li><strong>Access Control:</strong> Multi-role RBAC with JWT sessions and teacher validation loops that cut AI errors by 85%.</li>
-            <li><strong>Scalability:</strong> Async task workers for content generation and normalized relational schema for analytics.</li>
-          </ul>
-        </div>
-      ]
-    },
-    'project-library': {
-      badge: 'Case Study',
-      title: 'Library Management System',
-      subtitle: 'Full-stack app streamlining book circulation with 90%+ automated test coverage.',
-      accent: 'bg-gradient-to-r from-rose-500/30 via-transparent to-orange-500/10',
-      body: [
-        <div key="library" className="space-y-6">
-          <div className="flex flex-wrap gap-2">
-            {['Flask', 'SQLite', 'REST APIs', 'JavaScript', 'Agile'].map(tag => (
-              <span key={tag} className="px-3 py-1 bg-neutral-800 rounded-lg text-sm border border-neutral-700 text-neutral-200">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <p className="text-neutral-200">
-            Built for university libraries to manage borrowing workflows, user roles, and inventory history.
-          </p>
-          <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-300">
-            <li>Designed REST endpoints for CRUD operations with policy-based authorization.</li>
-            <li>Achieved 90% coverage via PyTest and Playwright integration suites.</li>
-            <li>Led three-person scrum team, handling sprint planning and Git workflows.</li>
-          </ul>
+        <div key="projects" className="space-y-10">
+          {projectItems.map((project) => (
+            <div key={project.title} className="bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6">
+              <div className="flex flex-wrap items-center gap-3 mb-3">
+                <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+                <div className="px-3 py-1 text-xs uppercase tracking-[0.3em] text-neutral-500 border border-neutral-700 rounded-full">
+                  Build
+                </div>
+              </div>
+              <p className="text-neutral-300 text-sm mb-4">{project.headline}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="px-3 py-1 bg-neutral-800 rounded-lg text-xs border border-neutral-700 text-neutral-200">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-300">
+                {project.bullets.map((point, idx) => (
+                  <li key={idx}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       ]
     },
@@ -413,9 +428,9 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* --- 3. FEATURED PROJECT (2x1) --- */}
+        {/* --- 3. PROJECTS (2x1) --- */}
         <div 
-          onClick={() => toggleTile('project-parhai')}
+          onClick={() => toggleTile('projects')}
           className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-500 fade-in-up delay-200 cursor-pointer"
         >
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -425,17 +440,17 @@ const Portfolio = () => {
               <BrainCircuit size={24} />
             </div>
             <div className="bg-neutral-800/50 backdrop-blur px-3 py-1 rounded-full text-xs text-neutral-300 border border-neutral-700 flex items-center gap-1 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors">
-              View Details <ArrowUpRight size={12} />
+              View Projects <ArrowUpRight size={12} />
             </div>
           </div>
 
           <div className="relative z-10 mt-4">
-            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">ParhaiPartner</h3>
+            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Projects</h3>
             <p className="text-neutral-400 text-sm mb-4 max-w-lg">
-              AI-Powered Academic Platform. Integrated Large Language Models with RAG to generate personalized study materials. Designed role-based access for 500+ users.
+              AI-first platforms, automation pipelines, and tooling shipped end-to-end. Highlight: ParhaiPartner, Library Management System, Job Portal.
             </p>
             <div className="flex flex-wrap gap-2">
-              {['React', 'Django REST', 'PostgreSQL', 'LLMs', 'RAG'].map(tag => (
+              {['ParhaiPartner', 'Library System', 'Job Portal'].map(tag => (
                 <span key={tag} className="px-2 py-1 bg-neutral-800 rounded-md text-xs text-neutral-300 font-mono border border-neutral-700/50">
                   {tag}
                 </span>
@@ -476,7 +491,7 @@ const Portfolio = () => {
 
         {/* --- 5. SECONDARY PROJECT (1x1) --- */}
         <div 
-          onClick={() => toggleTile('project-library')}
+          onClick={() => toggleTile('projects')}
           className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-rose-500/50 transition-colors fade-in-up delay-400 hover:bg-neutral-900 cursor-pointer"
         >
           <div className="flex justify-between">
