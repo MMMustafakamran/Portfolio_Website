@@ -25,11 +25,12 @@ const DetailPanel = ({ detail, onClose }) => {
   if (!detail) return null;
 
   return (
-    <div className="mt-8 flex justify-center">
-      <div className="w-full max-w-6xl relative bg-neutral-900/80 border border-neutral-800 rounded-3xl p-6 md:p-10 overflow-hidden">
-        <div className={`absolute inset-0 ${detail.accent} opacity-40 blur-3xl pointer-events-none`} />
+    <div className="mt-8 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="w-full max-w-6xl relative bg-neutral-900/80 border border-neutral-800 rounded-3xl p-6 md:p-10 overflow-hidden shadow-2xl">
+        <div className={`absolute inset-0 ${detail.accent} opacity-20 blur-3xl pointer-events-none`} />
         <div className="absolute inset-0 rounded-3xl border border-white/5 pointer-events-none"></div>
-        <div className="relative z-10 flex items-start justify-between gap-4">
+        
+        <div className="relative z-10 flex items-start justify-between gap-4 border-b border-neutral-800 pb-6 mb-8">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.3em] uppercase text-neutral-500">{detail.badge}</p>
             <h2 className="text-3xl md:text-4xl font-bold text-white mt-2">{detail.title}</h2>
@@ -37,12 +38,13 @@ const DetailPanel = ({ detail, onClose }) => {
           </div>
           <button 
             onClick={onClose}
-            className="p-2 bg-neutral-800 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors"
+            className="p-2 bg-neutral-800 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors ring-1 ring-neutral-700"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
-        <div className="relative z-10 mt-8 space-y-8 text-neutral-300">
+        
+        <div className="relative z-10 space-y-8 text-neutral-300">
           {detail.body}
         </div>
       </div>
@@ -141,26 +143,32 @@ const Portfolio = () => {
               src="https://github.com/MMMustafaKamran.png" 
               alt="Profile" 
               className="w-full max-w-[200px] rounded-2xl shadow-lg mb-4 border border-white/5"
+              onError={(e) => {e.target.style.display='none'}}
             />
-            <div className="space-y-2 text-sm text-neutral-400">
-              <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-white">
+            <div className="space-y-3 text-sm text-neutral-400 w-full">
+              <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noreferrer" className="flex items-center justify-center md:justify-start gap-2 hover:text-white transition-colors p-2 hover:bg-neutral-800 rounded-lg">
                 <Github size={18}/> @MMMustafaKamran
               </a>
-              <div className="inline-flex items-center gap-2">
+              <div className="flex items-center justify-center md:justify-start gap-2 p-2">
                 <Mail size={18}/> mmustafakamran@gmail.com
               </div>
             </div>
           </div>
-          <div className="space-y-4 text-lg leading-relaxed text-neutral-200">
+          <div className="space-y-6 text-lg leading-relaxed text-neutral-200">
             <p>
               I'm <strong>Muhammad Mustafa Kamran</strong>, obsessed with fusing modern AI (LLMs, RAG) with reliable backend systems. I enjoy orchestrating workflows that save hours for real teams.
             </p>
             <p>
               Recent work includes automation agents, data pipelines, and full-stack academic platforms served to hundreds of users. I thrive in ambiguous spaces where I can design systems end-to-end.
             </p>
-            <div className="pt-2">
-              <h4 className="text-sm uppercase tracking-[0.3em] text-indigo-400 mb-2">Education</h4>
-              <p>FAST NUCES, Islamabad — <span className="text-neutral-400">BS Computer Science (Expected 2026)</span></p>
+            <div className="pt-6 border-t border-neutral-800">
+              <h4 className="text-sm uppercase tracking-[0.3em] text-indigo-400 mb-3 flex items-center gap-2">
+                <GraduationCap size={16} /> Education
+              </h4>
+              <div className="bg-neutral-800/50 p-4 rounded-xl border border-neutral-700/50">
+                <p className="font-bold text-white">FAST NUCES, Islamabad</p>
+                <p className="text-neutral-400">BS Computer Science (Expected 2026)</p>
+              </div>
             </div>
           </div>
         </div>
@@ -172,22 +180,26 @@ const Portfolio = () => {
       subtitle: 'Impact snapshots from internships and leadership roles.',
       accent: 'bg-gradient-to-r from-indigo-500/30 via-slate-900 to-transparent',
       body: [
-        <div key="experience" className="space-y-10">
+        <div key="experience" className="space-y-10 relative">
+          <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-neutral-800"></div>
           {experienceItems.map((job, i) => (
-            <div key={job.role + i} className="relative pl-8">
-              <div className="absolute left-0 top-2 w-5 h-5 rounded-full bg-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.4)]"></div>
-              <div className="flex flex-wrap gap-2 items-center text-sm font-mono text-indigo-300">
-                <span>{job.company}</span>
+            <div key={job.role + i} className="relative pl-10">
+              <div className="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-neutral-900 border-2 border-indigo-500 z-10 shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
+              <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-sm font-mono text-indigo-400 mb-2">
+                <span className="font-bold text-white">{job.company}</span>
                 <span>•</span>
                 <span>{job.location}</span>
                 <span>•</span>
-                <span>{job.year}</span>
+                <span className="text-neutral-500">{job.year}</span>
               </div>
-              <h3 className="text-xl font-bold text-white mt-2">{job.role}</h3>
-              <p className="text-neutral-400 text-sm mt-2">{job.desc}</p>
-              <ul className="list-disc pl-5 mt-3 space-y-2 text-sm text-neutral-300">
+              <h3 className="text-xl font-bold text-white mb-2">{job.role}</h3>
+              <p className="text-neutral-300 text-base mb-4 italic">{job.desc}</p>
+              <ul className="space-y-2">
                 {job.bullets.map((point, idx) => (
-                  <li key={idx}>{point}</li>
+                  <li key={idx} className="flex gap-3 text-sm text-neutral-400">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-neutral-600 flex-shrink-0"></span>
+                    {point}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -201,26 +213,31 @@ const Portfolio = () => {
       subtitle: 'A sampling of AI, automation, and platform builds.',
       accent: 'bg-gradient-to-r from-emerald-500/20 via-transparent to-sky-500/20',
       body: [
-        <div key="projects" className="space-y-10">
+        <div key="projects" className="grid grid-cols-1 gap-6">
           {projectItems.map((project) => (
-            <div key={project.title} className="bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6">
-              <div className="flex flex-wrap items-center gap-3 mb-3">
+            <div key={project.title} className="bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6 hover:bg-neutral-900/60 transition-colors">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
                 <h3 className="text-2xl font-bold text-white">{project.title}</h3>
-                <div className="px-3 py-1 text-xs uppercase tracking-[0.3em] text-neutral-500 border border-neutral-700 rounded-full">
+                <div className="px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
                   Build
                 </div>
               </div>
-              <p className="text-neutral-300 text-sm mb-4">{project.headline}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
+              <p className="text-neutral-300 text-base mb-6 font-medium">{project.headline}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags.map((tag) => (
-                  <span key={tag} className="px-3 py-1 bg-neutral-800 rounded-lg text-xs border border-neutral-700 text-neutral-200">
+                  <span key={tag} className="px-3 py-1 bg-neutral-950 rounded-md text-xs border border-neutral-800 text-neutral-400 font-mono">
                     {tag}
                   </span>
                 ))}
               </div>
-              <ul className="list-disc pl-5 space-y-2 text-sm text-neutral-300">
+              
+              <ul className="space-y-2">
                 {project.bullets.map((point, idx) => (
-                  <li key={idx}>{point}</li>
+                  <li key={idx} className="flex gap-3 text-sm text-neutral-400">
+                    <Check size={16} className="text-emerald-500/50 mt-0.5 flex-shrink-0" />
+                    {point}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -234,7 +251,7 @@ const Portfolio = () => {
       subtitle: 'Tools I ship with daily—front to back, infra included.',
       accent: 'bg-gradient-to-r from-sky-500/20 via-transparent to-violet-500/20',
       body: [
-        <div key="stack-grid" className="grid md:grid-cols-2 gap-6">
+        <div key="stack-grid" className="grid md:grid-cols-2 gap-4">
           {[
             { icon: <Code2 size={18}/>, title: 'Languages', skills: ['JavaScript', 'TypeScript', 'Python', 'C++', 'C#', 'SQL'] },
             { icon: <Monitor size={18}/>, title: 'Frontend', skills: ['React', 'Redux', 'Tailwind', 'Responsive UI'] },
@@ -243,14 +260,16 @@ const Portfolio = () => {
             { icon: <Globe size={18}/>, title: 'AI / Automation', skills: ['LLMs', 'RAG', 'OpenAI API', 'n8n'] },
             { icon: <HardDrive size={18}/>, title: 'Ops & Cloud', skills: ['Docker', 'CI/CD', 'Azure', 'Observability'] }
           ].map(section => (
-            <div key={section.title} className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4">
-              <div className="flex items-center gap-2 text-indigo-300 font-semibold mb-3">
+            <div key={section.title} className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-5 hover:border-neutral-700 transition-colors">
+              <div className="flex items-center gap-2 text-indigo-300 font-semibold mb-4">
                 {section.icon}
                 {section.title}
               </div>
               <div className="flex flex-wrap gap-2 text-sm text-neutral-300">
                 {section.skills.map(skill => (
-                  <span key={skill} className="px-2 py-1 bg-neutral-800 rounded-lg border border-neutral-700">{skill}</span>
+                  <span key={skill} className="px-2.5 py-1 bg-neutral-950 rounded-lg border border-neutral-800 text-xs text-neutral-400 hover:text-white hover:border-neutral-600 transition-colors">
+                    {skill}
+                  </span>
                 ))}
               </div>
             </div>
@@ -265,38 +284,48 @@ const Portfolio = () => {
       accent: 'bg-gradient-to-r from-indigo-500/30 via-transparent to-purple-500/20',
       body: [
         <div key="contact" className="grid md:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-300">Direct lines</h4>
-            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 space-y-3">
-              <div className="text-neutral-400 text-sm">Email</div>
-              <a href="mailto:mmustafakamran@gmail.com" className="text-white text-lg font-semibold hover:text-indigo-300 transition-colors">
+          <div className="space-y-6">
+            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-400">Direct lines</h4>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4 hover:bg-neutral-900 transition-colors">
+              <div className="text-neutral-500 text-xs uppercase tracking-widest">Email</div>
+              <a href="mailto:mmustafakamran@gmail.com" className="block text-white text-xl font-bold hover:text-indigo-400 transition-colors">
                 mmustafakamran@gmail.com
               </a>
-              <p className="text-neutral-500 text-xs uppercase tracking-[0.3em]">Replies within 24h</p>
+              <p className="text-green-500 text-xs flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                Replies within 24h
+              </p>
             </div>
-            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 space-y-3">
-              <div className="text-neutral-400 text-sm">LinkedIn</div>
-              <a href="https://linkedin.com/in/mustafaKamran03" target="_blank" rel="noreferrer" className="text-white text-lg font-semibold hover:text-indigo-300 transition-colors">
+            
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4 hover:bg-neutral-900 transition-colors">
+              <div className="text-neutral-500 text-xs uppercase tracking-widest">LinkedIn</div>
+              <a href="https://linkedin.com/in/mustafaKamran03" target="_blank" rel="noreferrer" className="block text-white text-xl font-bold hover:text-indigo-400 transition-colors">
                 linkedin.com/in/mustafaKamran03
               </a>
-              <p className="text-neutral-500 text-xs uppercase tracking-[0.3em]">DMs open</p>
+              <p className="text-neutral-500 text-xs">DMs open</p>
             </div>
           </div>
-          <div className="space-y-4">
-            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-300">Social</h4>
-            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 flex flex-col gap-3">
+          
+          <div className="space-y-6">
+            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-400">Social</h4>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 flex flex-col gap-4">
               {[
                 { label: 'GitHub', href: 'https://github.com/MMMustafaKamran' },
-                { label: 'Twitter', href: 'https://twitter.com' },
-                { label: 'Portfolio', href: '#' },
+                { label: 'LinkedIn', href: 'https://linkedin.com/in/mustafaKamran03' },
+                { label: 'Portfolio Source', href: '#' },
               ].map((link) => (
-                <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="text-neutral-300 hover:text-white transition-colors flex items-center gap-2">
-                  <ArrowUpRight size={14} /> {link.label}
+                <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="text-neutral-300 hover:text-white transition-colors flex items-center justify-between group p-2 hover:bg-neutral-800 rounded-lg">
+                  <span className="flex items-center gap-3">
+                    {link.label === 'GitHub' ? <Github size={18}/> : <Globe size={18}/>}
+                    {link.label}
+                  </span>
+                  <ArrowUpRight size={14} className="text-neutral-600 group-hover:text-white transition-colors" />
                 </a>
               ))}
             </div>
-            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 text-sm text-neutral-400">
-              Based in Islamabad (PKT) – open to remote and on-site work.
+            <div className="bg-neutral-900/40 border border-neutral-800/50 rounded-xl p-4 text-sm text-neutral-500 flex items-center gap-2">
+              <Globe size={14} />
+              Based in Islamabad (PKT) – open to remote.
             </div>
           </div>
         </div>,
@@ -312,7 +341,10 @@ const Portfolio = () => {
 
   useEffect(() => {
     if (selectedTile && detailRef.current) {
-      detailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Small delay to ensure render
+      setTimeout(() => {
+        detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     }
   }, [selectedTile]);
 
@@ -336,11 +368,11 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 md:pl-28 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative">
+    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 md:pl-24 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative">
 
       {/* Minimal left nav */}
-      <div className="fixed top-1/2 left-6 -translate-y-1/2 z-20">
-        <nav className="flex flex-col gap-4">
+      <div className="hidden md:block fixed top-1/2 left-6 -translate-y-1/2 z-20">
+        <nav className="flex flex-col gap-6">
           {[
             { label: 'Profile', key: 'profile' },
             { label: 'Experience', key: 'experience' },
@@ -351,15 +383,19 @@ const Portfolio = () => {
             <button
               key={item.key}
               onClick={() => {
-                toggleTile(item.key);
-                if (item.key === 'contact') {
-                  document.getElementById('contact-tile')?.scrollIntoView({ behavior: 'smooth' });
+                if (selectedTile === item.key) {
+                   // If already open, maybe just scroll to it
+                   detailRef.current?.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                   toggleTile(item.key);
                 }
               }}
-              className="group relative flex items-center text-[11px] uppercase tracking-[0.3em] text-neutral-600 hover:text-white transition-all duration-300"
+              className="group relative flex items-center"
             >
-              <span className="block w-2 h-2 rounded-full bg-neutral-600 transition-all duration-300 group-hover:w-6 group-hover:bg-white"></span>
-              <span className="ml-2 text-[10px] whitespace-nowrap text-neutral-500 opacity-70 transition-all duration-300 group-hover:text-white group-hover:opacity-100 group-hover:ml-3 group-hover:text-xs">
+              <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${selectedTile === item.key ? 'bg-indigo-500 scale-125' : 'bg-neutral-600 group-hover:bg-white'}`}></div>
+              
+              {/* Tooltip-style label that appears on hover */}
+              <span className="absolute left-6 px-2 py-1 bg-neutral-800 text-[10px] uppercase tracking-wider text-white rounded opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 pointer-events-none">
                 {item.label}
               </span>
             </button>
@@ -389,7 +425,6 @@ const Portfolio = () => {
         .delay-400 { animation-delay: 400ms; }
         .delay-500 { animation-delay: 500ms; }
         
-        /* Custom Scrollbar for modal content */
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
         }
@@ -411,7 +446,7 @@ const Portfolio = () => {
         {/* --- 1. HERO PROFILE (2x2) --- */}
         <div 
           onClick={() => toggleTile('profile')}
-          className="col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group fade-in-up cursor-pointer hover:border-neutral-600 transition-colors"
+          className={`col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden group fade-in-up cursor-pointer transition-all duration-300 ${selectedTile === 'profile' ? 'border-indigo-500 ring-1 ring-indigo-500/50' : 'border-neutral-800 hover:border-neutral-600'}`}
         >
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 group-hover:from-indigo-500/10 group-hover:to-purple-500/10 transition-colors duration-500"></div>
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl transition-all duration-500 group-hover:scale-110"></div>
@@ -429,6 +464,12 @@ const Portfolio = () => {
                    <Terminal size={32} /> 
                  </div>
               </div>
+              <div className="bg-neutral-800/50 px-3 py-1 rounded-full border border-neutral-700 backdrop-blur-sm">
+                <span className="text-xs font-medium text-green-400 flex items-center gap-1">
+                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                  Available
+                </span>
+              </div>
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-2">Muhammad Mustafa Kamran</h1>
@@ -436,7 +477,7 @@ const Portfolio = () => {
               <Code2 size={16} /> Software Engineer
             </p>
             <p className="text-neutral-400 text-sm leading-relaxed max-w-md">
-              Specializing in <span className="text-neutral-200">AI Agents, RAG Systems, and Full Stack Automation</span>. Experienced in orchestrating workflows and building scalable data pipelines.
+              Specializing in <span className="text-neutral-200">AI Agents, RAG Systems, and Full Stack Automation</span>.
             </p>
           </div>
 
@@ -463,7 +504,7 @@ const Portfolio = () => {
         {/* --- 2. EXPERIENCE (2x2) --- */}
         <div 
           onClick={() => toggleTile('experience')}
-          className="col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col relative group hover:border-indigo-500/50 transition-colors fade-in-up delay-100 cursor-pointer"
+          className={`col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border rounded-[2rem] p-8 flex flex-col relative group transition-all duration-300 fade-in-up delay-100 cursor-pointer ${selectedTile === 'experience' ? 'border-indigo-500 ring-1 ring-indigo-500/50' : 'border-neutral-800 hover:border-neutral-600'}`}
         >
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-indigo-900/10 via-transparent to-transparent opacity-50"></div>
           
@@ -498,7 +539,7 @@ const Portfolio = () => {
         {/* --- 3. PROJECTS (wide feature) --- */}
         <div 
           onClick={() => toggleTile('projects')}
-          className="col-span-1 md:col-span-4 md:row-span-2 bg-gradient-to-br from-neutral-900 via-neutral-900/70 to-neutral-900/40 border border-neutral-800 rounded-3xl p-8 relative overflow-hidden group fade-in-up delay-200 cursor-pointer"
+          className={`col-span-1 md:col-span-4 md:row-span-2 bg-gradient-to-br from-neutral-900 via-neutral-900/70 to-neutral-900/40 border rounded-3xl p-8 relative overflow-hidden group fade-in-up delay-200 cursor-pointer transition-all duration-300 ${selectedTile === 'projects' ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-neutral-800 hover:border-emerald-500/40'}`}
         >
           <div className="absolute inset-0 opacity-40 group-hover:opacity-70 transition-opacity duration-500 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_60%)]"></div>
           <div className="absolute -bottom-12 -right-10 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full opacity-40"></div>
@@ -509,10 +550,10 @@ const Portfolio = () => {
                 <p className="text-[11px] font-semibold tracking-[0.4em] uppercase text-emerald-300/70">Selected Work</p>
                 <h3 className="text-3xl md:text-4xl font-bold text-white mt-2">Projects</h3>
                 <p className="text-neutral-400 text-sm mt-2 max-w-3xl">
-                  AI-first platforms, automation pipelines, and systems shipped end-to-end. Tap to read deeper case studies for ParhaiPartner, Library System, Job Portal and more.
+                  AI-first platforms, automation pipelines, and systems shipped end-to-end. Tap to see full technical breakdowns.
                 </p>
               </div>
-              <div className="bg-neutral-900/70 px-4 py-1.5 rounded-full text-xs text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+              <div className="bg-neutral-900/70 px-4 py-1.5 rounded-full text-xs text-emerald-300 border border-emerald-500/30 flex items-center gap-1 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
                 View All <ArrowUpRight size={12} />
               </div>
             </div>
@@ -532,18 +573,15 @@ const Portfolio = () => {
                       <p className="text-[11px] text-emerald-300/80 uppercase tracking-[0.3em]">Build</p>
                     </div>
                   </div>
-                  <p className="text-[12px] text-neutral-500 leading-relaxed line-clamp-3">
+                  <p className="text-[12px] text-neutral-500 leading-relaxed line-clamp-2">
                     {project.headline}
                   </p>
-                  <div className="flex flex-wrap gap-1 text-[10px] text-neutral-400">
+                  <div className="flex flex-wrap gap-1 text-[10px] text-neutral-400 mt-auto">
                     {project.tags.slice(0, 3).map((tag) => (
                       <span key={tag} className="px-2 py-0.5 bg-neutral-900 rounded-full border border-neutral-800">
                         {tag}
                       </span>
                     ))}
-                    {project.tags.length > 3 && (
-                      <span className="px-2 py-0.5 border border-neutral-800 rounded-full">+{project.tags.length - 3}</span>
-                    )}
                   </div>
                 </div>
               ))}
@@ -554,7 +592,7 @@ const Portfolio = () => {
         {/* --- 4. TECH STACK (2x1) --- */}
         <div 
           onClick={() => toggleTile('stack')}
-          className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 overflow-hidden relative fade-in-up delay-300 flex flex-col justify-center cursor-pointer hover:border-neutral-500 transition-colors"
+          className={`col-span-1 md:col-span-2 bg-neutral-900/50 border rounded-[2rem] p-6 overflow-hidden relative fade-in-up delay-300 flex flex-col justify-center cursor-pointer transition-all duration-300 ${selectedTile === 'stack' ? 'border-sky-500 ring-1 ring-sky-500/50' : 'border-neutral-800 hover:border-neutral-500'}`}
         >
            <div className="flex justify-between items-center mb-6 px-2">
              <h3 className="text-sm font-bold text-neutral-500 uppercase tracking-wider flex items-center gap-2">
@@ -567,7 +605,7 @@ const Portfolio = () => {
              <div className="flex whitespace-nowrap animate-scroll">
                {[...Array(2)].map((_, i) => (
                  <div key={i} className="flex gap-2 mx-2">
-                   {['Python', 'TypeScript', 'React', 'Django', 'Node.js', 'C++', 'C#', 'SQL', 'Docker', 'Azure', 'LLMs', 'RAG', 'n8n', 'Git', 'PostgreSQL', 'MongoDB', 'FastAPI'].map((tech) => (
+                   {['Python', 'TypeScript', 'React', 'Django', 'Node.js', 'C++', 'C#', 'SQL', 'Docker', 'Azure', 'LLMs', 'RAG', 'n8n', 'Git'].map((tech) => (
                      <span key={tech} className="px-4 py-2 bg-neutral-800 text-sm rounded-xl text-neutral-300 border border-neutral-700/50">
                        {tech}
                      </span>
@@ -582,7 +620,7 @@ const Portfolio = () => {
         </div>
 
         {/* --- 5. SOCIAL LINKS (1x1) --- */}
-        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-center gap-3 fade-in-up delay-400">
+        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-[2rem] p-6 flex flex-col justify-center gap-3 fade-in-up delay-400">
           <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between bg-neutral-800/50 p-3 rounded-2xl hover:bg-white hover:text-black transition-all duration-300 group border border-transparent hover:border-neutral-200">
             <div className="flex items-center gap-3">
               <Github size={20} className="text-white group-hover:text-black transition-colors"/>
@@ -604,14 +642,14 @@ const Portfolio = () => {
           type="button"
           id="contact-tile"
           onClick={() => toggleTile('contact')}
-          className="col-span-1 md:col-span-1 bg-indigo-600 rounded-3xl p-4 flex items-center justify-between gap-4 relative overflow-hidden group fade-in-up delay-500 cursor-pointer hover:bg-indigo-700 transition-colors"
+          className={`col-span-1 md:col-span-1 bg-indigo-600 rounded-[2rem] p-4 flex items-center justify-between gap-4 relative overflow-hidden group fade-in-up delay-500 cursor-pointer transition-colors ${selectedTile === 'contact' ? 'ring-4 ring-indigo-900' : 'hover:bg-indigo-700'}`}
         >
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
           <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
           
           <div className="relative z-10 text-left">
             <h2 className="text-lg font-bold text-white mb-0.5">Let's collaborate</h2>
-            <p className="text-indigo-200 text-[11px] font-medium tracking-wide uppercase">Tap for contact details</p>
+            <p className="text-indigo-200 text-[11px] font-medium tracking-wide uppercase">Tap for contact</p>
           </div>
 
           <div className="relative z-10 bg-white text-indigo-600 p-2.5 rounded-2xl group-hover:scale-110 transition-transform shadow-xl">
@@ -621,11 +659,15 @@ const Portfolio = () => {
 
       </div>
 
-      {activeDetail && (
-        <div ref={detailRef}>
-          <DetailPanel detail={activeDetail} onClose={() => setSelectedTile(null)} />
-        </div>
-      )}
+      {/* --- DETAIL PANEL (Appears below grid) --- */}
+      <div ref={detailRef} className="scroll-mt-8">
+        {activeDetail && (
+          <DetailPanel 
+            detail={activeDetail} 
+            onClose={() => setSelectedTile(null)} 
+          />
+        )}
+      </div>
 
     </div>
   );
