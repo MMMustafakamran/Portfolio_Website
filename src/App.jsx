@@ -12,6 +12,7 @@ import ContactTile from './components/ContactTile';
 import SpotifyTile from './components/SpotifyTile';
 import HobbiesTile from './components/HobbiesTile';
 import LocationTile from './components/LocationTile';
+import ExtracurricularsTile from './components/ExtracurricularsTile';
 import DetailModal from './components/DetailModal';
 
 const Portfolio = () => {
@@ -308,6 +309,7 @@ const Portfolio = () => {
             <SpotifyTile />
             <HobbiesTile />
             <LocationTile />
+            <ExtracurricularsTile />
           </div>
         </LayoutGroup>
       </div>

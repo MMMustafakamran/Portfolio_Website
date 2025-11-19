@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Dumbbell, Table2 } from 'lucide-react'; // Table2 as Table Tennis table proxy
+import { Dumbbell } from 'lucide-react';
 
 const HobbiesTile = () => {
     return (

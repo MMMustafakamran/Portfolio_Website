@@ -30,12 +30,8 @@ const DetailModal = ({ detail, onClose }) => {
                             <div className="absolute inset-0 bg-noise opacity-50 pointer-events-none" />
 
                             {/* Header - Fixed at top */}
-                            <div className="relative z-20 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-neutral-800 p-6 flex items-start justify-between gap-4 shrink-0">
-                                <div>
-                                    <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-neutral-500 mb-2">{detail.badge}</p>
-                                    <h2 className="text-3xl md:text-4xl font-bold text-white">{detail.title}</h2>
-                                    {detail.subtitle && <p className="text-neutral-400 mt-2 text-sm md:text-base font-light">{detail.subtitle}</p>}
-                                </div>
+                            <div className="relative z-20 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-neutral-800 p-4 flex items-center justify-between gap-4 shrink-0">
+                                <h2 className="text-xl md:text-2xl font-bold text-white">{detail.title}</h2>
                                 <button
                                     onClick={onClose}
                                     className="p-2 bg-neutral-800/50 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors ring-1 ring-neutral-700"
