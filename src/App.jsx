@@ -4,18 +4,17 @@ import {
   Linkedin, 
   Mail, 
   ArrowUpRight, 
-  MapPin, 
   Terminal,
   Cpu,
   Globe,
   Database,
-  Music,
   Copy,
   Check,
   Code2,
   Briefcase,
   GraduationCap,
-  BrainCircuit
+  BrainCircuit,
+  Library
 } from 'lucide-react';
 
 const Portfolio = () => {
@@ -47,13 +46,6 @@ const Portfolio = () => {
         .animate-scroll {
           animation: scroll 25s linear infinite;
         }
-        .equalizer-bar {
-          animation: equalizer 1s ease-in-out infinite;
-        }
-        @keyframes equalizer {
-          0%, 100% { height: 20%; }
-          50% { height: 100%; }
-        }
         .fade-in-up {
           animation: fadeInUp 0.5s ease-out forwards;
           opacity: 0;
@@ -71,9 +63,8 @@ const Portfolio = () => {
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 auto-rows-[180px]">
 
-        {/* --- 1. HERO PROFILE (2x2) --- */}
+        {/* --- 1. HERO PROFILE (2x2) [Top Left] --- */}
         <div className="col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group fade-in-up">
-          {/* Animated Background Gradient */}
           <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 group-hover:from-indigo-500/10 group-hover:to-purple-500/10 transition-colors duration-500"></div>
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl transition-all duration-500 group-hover:scale-110"></div>
           
@@ -83,10 +74,10 @@ const Portfolio = () => {
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-2">Muhammad Mustafa Kamran</h1>
             <p className="text-indigo-400 font-medium mb-4 flex items-center gap-2">
-              <Code2 size={16} /> CS Student @ FAST NUCES
+              <Code2 size={16} /> Software Engineer
             </p>
-            <p className="text-neutral-400 text-sm leading-relaxed max-w-sm">
-              Software Engineer specializing in <span className="text-neutral-200">AI, Automation, and Full Stack</span>. Experienced in building intelligent agents, RAG systems, and scalable data pipelines.
+            <p className="text-neutral-400 text-sm leading-relaxed max-w-md">
+              Specializing in <span className="text-neutral-200">AI Agents, RAG Systems, and Full Stack Automation</span>. Experienced in orchestrating workflows (n8n) and building scalable data pipelines.
             </p>
           </div>
 
@@ -107,28 +98,132 @@ const Portfolio = () => {
           </div>
         </div>
 
-        {/* --- 2. MAP / LOCATION (1x1) --- */}
-        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col items-center justify-center relative overflow-hidden group fade-in-up delay-100 hover:border-neutral-600 transition-colors">
-           <div className="absolute inset-0 opacity-20">
-             <svg className="w-full h-full" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-               <path d="M0 20 L100 20 M20 0 L20 100 M50 0 L50 100 M80 0 L80 100 M0 50 L100 50 M0 80 L100 80" strokeWidth="0.5" className="text-neutral-500" />
-             </svg>
+        {/* --- 2. EXPERIENCE (2x2) [Top Right] --- */}
+        <div className="col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col relative group hover:border-indigo-500/50 transition-colors fade-in-up delay-100">
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-indigo-900/10 via-transparent to-transparent opacity-50"></div>
+          
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Briefcase size={24} className="text-indigo-500"/> Experience
+            </h3>
+            <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-xs rounded-full border border-indigo-500/20">3 Positions</span>
+          </div>
+          
+          <div className="space-y-6 relative h-full overflow-y-auto pr-2 custom-scrollbar z-10">
+            {/* Connecting Line */}
+            <div className="absolute left-[19px] top-2 bottom-2 w-[2px] bg-neutral-800"></div>
+
+            {[
+              { 
+                role: 'Software Engineering Intern', 
+                company: 'CARE (Islamabad)', 
+                year: 'Jun 2025 – Aug 2025', 
+                active: true,
+                desc: 'Engineered AI call automation agents with RAG & n8n. Reduced manual processing by 70%.' 
+              },
+              { 
+                role: 'Software Engineering Intern', 
+                company: 'ElementalTV (Remote)', 
+                year: 'May 2025 – Jun 2025', 
+                active: false,
+                desc: 'Built auto-data pipelines for AdOps processing 10k+ daily metrics. Improved accuracy by 95%.'
+              },
+              { 
+                role: 'Head of Marketing', 
+                company: 'Computing Society', 
+                year: 'Sep 2023 – Present', 
+                active: false,
+                desc: 'Led cross-functional team of 18 members. Managed campaigns with 500K+ impressions.'
+              }
+            ].map((job, i) => (
+              <div key={i} className="relative pl-12 group/item">
+                <div className={`absolute left-[12px] top-1.5 w-4 h-4 rounded-full border-2 z-10 bg-neutral-900 transition-colors duration-300 ${job.active ? 'border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'border-neutral-600 group-hover/item:border-neutral-400'}`}></div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className={`text-base font-bold transition-colors ${job.active ? 'text-white' : 'text-neutral-300 group-hover/item:text-white'}`}>{job.role}</h4>
+                    <p className="text-xs text-indigo-400 font-mono mb-1">{job.company}</p>
+                  </div>
+                  <span className="text-[10px] text-neutral-500 font-mono bg-neutral-800 px-2 py-1 rounded hidden sm:block">{job.year}</span>
+                </div>
+                <p className="text-sm text-neutral-400 leading-snug mt-1">{job.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* --- 3. FEATURED PROJECT (2x1) [Middle Left] --- */}
+        <div className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-500 fade-in-up delay-200 cursor-pointer">
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <div className="flex justify-between items-start relative z-10">
+            <div className="bg-emerald-500/10 p-2.5 rounded-xl text-emerald-400 ring-1 ring-emerald-500/20">
+              <BrainCircuit size={24} />
+            </div>
+            <div className="bg-neutral-800/50 backdrop-blur px-3 py-1 rounded-full text-xs text-neutral-300 border border-neutral-700 flex items-center gap-1">
+              Featured <ArrowUpRight size={12} />
+            </div>
+          </div>
+
+          <div className="relative z-10 mt-4">
+            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">ParhaiPartner</h3>
+            <p className="text-neutral-400 text-sm mb-4 max-w-lg">
+              AI-Powered Academic Platform. Integrated Large Language Models with RAG to generate personalized study materials. Designed role-based access for 500+ users.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {['React', 'Django REST', 'PostgreSQL', 'LLMs', 'RAG'].map(tag => (
+                <span key={tag} className="px-2 py-1 bg-neutral-800 rounded-md text-xs text-neutral-300 font-mono border border-neutral-700/50">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* --- 4. TECH STACK (2x1) [Middle Right] --- */}
+        <div className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 overflow-hidden relative fade-in-up delay-300 flex flex-col justify-center">
+           <div className="flex justify-between items-center mb-6 px-2">
+             <h3 className="text-sm font-bold text-neutral-500 uppercase tracking-wider flex items-center gap-2">
+               <Cpu size={16}/> Technical Arsenal
+             </h3>
+             <span className="text-[10px] text-neutral-600">Scrolls automatically</span>
            </div>
            
-           {/* Radar Pulse Effect */}
-           <div className="relative flex items-center justify-center mb-3">
-             <div className="absolute w-12 h-12 bg-emerald-500/20 rounded-full animate-ping"></div>
-             <div className="relative z-10 bg-neutral-950 p-3 rounded-full border border-neutral-800 shadow-xl">
-               <MapPin className="text-emerald-500" size={20} />
+           <div className="relative w-full overflow-hidden mask-gradient">
+             <div className="flex whitespace-nowrap animate-scroll">
+               {[...Array(2)].map((_, i) => (
+                 <div key={i} className="flex gap-2 mx-2">
+                   {['Python', 'TypeScript', 'React', 'Django', 'Node.js', 'C++', 'C#', 'SQL', 'Docker', 'Azure', 'LLMs', 'RAG', 'n8n', 'Git', 'PostgreSQL', 'MongoDB', 'FastAPI'].map((tech) => (
+                     <span key={tech} className="px-4 py-2 bg-neutral-800 text-sm rounded-xl text-neutral-300 border border-neutral-700/50 hover:border-neutral-500 transition-colors">
+                       {tech}
+                     </span>
+                   ))}
+                 </div>
+               ))}
              </div>
            </div>
            
-           <h3 className="relative z-10 font-bold text-white">Islamabad</h3>
-           <p className="relative z-10 text-xs text-neutral-500 font-mono mt-1">{time} PKT</p>
+           {/* Fade edges for scroll */}
+           <div className="absolute left-0 top-12 bottom-0 w-12 bg-gradient-to-r from-neutral-900 to-transparent pointer-events-none"></div>
+           <div className="absolute right-0 top-12 bottom-0 w-12 bg-gradient-to-l from-neutral-900 to-transparent pointer-events-none"></div>
         </div>
 
-        {/* --- 3. SOCIAL LINKS (1x1) --- */}
-        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-center gap-3 fade-in-up delay-200">
+        {/* --- 5. SECONDARY PROJECT (1x1) [Bottom Left] --- */}
+        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-rose-500/50 transition-colors fade-in-up delay-400 hover:bg-neutral-900">
+          <div className="flex justify-between">
+            <div className="bg-rose-500/10 w-fit p-2 rounded-lg text-rose-400">
+              <Library size={20} />
+            </div>
+            <ArrowUpRight size={16} className="text-neutral-600 group-hover:text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-white group-hover:text-rose-400 transition-colors">Library System</h3>
+            <p className="text-xs text-neutral-500 mt-1">Flask, SQLite & REST APIs.</p>
+            <p className="text-[10px] text-neutral-600 mt-2">90% Code Coverage</p>
+          </div>
+        </div>
+
+        {/* --- 6. SOCIAL LINKS (1x1) [Bottom Middle] --- */}
+        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-center gap-3 fade-in-up delay-400">
           <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between bg-neutral-800/50 p-3 rounded-2xl hover:bg-white hover:text-black transition-all duration-300 group border border-transparent hover:border-neutral-200">
             <div className="flex items-center gap-3">
               <Github size={20} className="text-white group-hover:text-black transition-colors"/>
@@ -145,134 +240,19 @@ const Portfolio = () => {
           </a>
         </div>
 
-        {/* --- 4. FEATURED PROJECT (2x1) --- */}
-        <div className="col-span-1 md:col-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 flex flex-col justify-between relative overflow-hidden group hover:border-emerald-500/50 transition-all duration-500 fade-in-up delay-300 cursor-pointer">
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          
-          <div className="flex justify-between items-start relative z-10">
-            <div className="bg-emerald-500/10 p-2.5 rounded-xl text-emerald-400 ring-1 ring-emerald-500/20">
-              <BrainCircuit size={24} />
-            </div>
-            <div className="bg-neutral-800/50 backdrop-blur px-3 py-1 rounded-full text-xs text-neutral-300 border border-neutral-700">
-              Featured Project
-            </div>
-          </div>
-
-          <div className="relative z-10 mt-4">
-            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">ParhaiPartner</h3>
-            <p className="text-neutral-400 text-sm mb-4 max-w-md">
-              AI-Powered Academic Platform integrated with LLMs & RAG to generate personalized study materials. Serving 500+ users with role-based access.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {['React', 'Django REST', 'PostgreSQL', 'LLMs', 'RAG'].map(tag => (
-                <span key={tag} className="px-2 py-1 bg-neutral-800 rounded-md text-xs text-neutral-300 font-mono border border-neutral-700/50">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* --- 5. INFINITE SCROLL TECH STACK (1x1) --- */}
-        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 overflow-hidden relative fade-in-up delay-400 flex flex-col justify-center">
-           <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-6 text-center">My Stack</h3>
-           
-           <div className="relative w-full overflow-hidden mask-gradient">
-             <div className="flex whitespace-nowrap animate-scroll">
-               {[...Array(2)].map((_, i) => (
-                 <div key={i} className="flex gap-2 mx-2">
-                   {['Python', 'TypeScript', 'React', 'Django', 'Node.js', 'C++', 'C#', 'SQL', 'Docker', 'Azure', 'LLMs', 'RAG', 'n8n', 'Git'].map((tech) => (
-                     <span key={tech} className="px-3 py-1.5 bg-neutral-800 text-xs rounded-lg text-neutral-300 border border-neutral-700/50">
-                       {tech}
-                     </span>
-                   ))}
-                 </div>
-               ))}
-             </div>
-           </div>
-           
-           {/* Fade edges for scroll */}
-           <div className="absolute left-0 top-12 bottom-0 w-8 bg-gradient-to-r from-neutral-900 to-transparent pointer-events-none"></div>
-           <div className="absolute right-0 top-12 bottom-0 w-8 bg-gradient-to-l from-neutral-900 to-transparent pointer-events-none"></div>
-        </div>
-
-        {/* --- 6. EXPERIENCE (1x2) - Tall Card --- */}
-        <div className="col-span-1 md:row-span-2 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col relative group hover:border-indigo-500/50 transition-colors fade-in-up delay-200">
-          <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-            <Cpu size={20} className="text-indigo-500"/> Experience
-          </h3>
-          
-          <div className="space-y-8 relative h-full">
-            {/* Connecting Line */}
-            <div className="absolute left-[7px] top-3 bottom-3 w-[2px] bg-neutral-800"></div>
-
-            {[
-              { role: 'SE Intern', company: 'CARE (Islamabad)', year: 'Summer 2025', active: true, icon: Briefcase },
-              { role: 'SE Intern', company: 'ElementalTV (Remote)', year: 'Summer 2025', active: false, icon: Briefcase },
-              { role: 'Head of Marketing', company: 'Computing Society', year: '2023-Present', active: false, icon: GraduationCap }
-            ].map((job, i) => (
-              <div key={i} className="relative pl-8 group/item">
-                <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 z-10 bg-neutral-900 transition-colors duration-300 ${job.active ? 'border-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'border-neutral-600 group-hover/item:border-neutral-400'}`}></div>
-                <h4 className={`text-sm font-bold transition-colors ${job.active ? 'text-white' : 'text-neutral-400 group-hover/item:text-white'}`}>{job.role}</h4>
-                <p className="text-xs text-neutral-500 font-mono mb-1">{job.company}</p>
-                <p className="text-xs text-neutral-600 font-mono">{job.year}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* --- 7. SECONDARY PROJECT (1x1) --- */}
-        <div className="col-span-1 bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between group hover:border-rose-500/50 transition-colors fade-in-up delay-400 hover:bg-neutral-900">
-          <div className="flex justify-between">
-            <div className="bg-rose-500/10 w-fit p-2 rounded-lg text-rose-400">
-              <Database size={20} />
-            </div>
-            <ArrowUpRight size={16} className="text-neutral-600 group-hover:text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-white group-hover:text-rose-400 transition-colors">Job Portal</h3>
-            <p className="text-xs text-neutral-500 mt-1">JavaFX & MVC Architecture.</p>
-          </div>
-        </div>
-
-        {/* --- 8. NOW PLAYING (1x1) --- */}
-        <div className="col-span-1 bg-gradient-to-br from-[#1DB954] to-[#191414] rounded-3xl p-6 flex flex-col justify-between text-white relative overflow-hidden fade-in-up delay-500 group cursor-pointer">
-          {/* Spotify Icon Background */}
-          <div className="absolute right-[-20px] bottom-[-20px] opacity-20 group-hover:opacity-30 transition-opacity transform group-hover:scale-110 duration-500">
-            <Music size={100} />
-          </div>
-          
-          <div className="flex items-center justify-between">
-             <div className="flex items-center gap-2 bg-black/20 w-fit px-2 py-1 rounded-full backdrop-blur-sm">
-               {/* Equalizer Animation */}
-               <div className="flex items-end gap-[2px] h-3">
-                 <div className="w-1 bg-white/80 rounded-sm equalizer-bar" style={{ animationDuration: '0.8s' }}></div>
-                 <div className="w-1 bg-white/80 rounded-sm equalizer-bar" style={{ animationDuration: '1.1s' }}></div>
-                 <div className="w-1 bg-white/80 rounded-sm equalizer-bar" style={{ animationDuration: '0.6s' }}></div>
-               </div>
-               <span className="text-[10px] font-bold uppercase tracking-wide opacity-90">Listening</span>
-             </div>
-          </div>
-          
-          <div>
-            <p className="text-xs font-medium opacity-80 mb-1">Coding Playlist</p>
-            <p className="font-bold text-lg leading-tight truncate">Lofi Beats</p>
-          </div>
-        </div>
-
-        {/* --- 9. CONTACT CTA (2x1) --- */}
+        {/* --- 7. CONTACT CTA (2x1) [Bottom Right] --- */}
         <div className="col-span-1 md:col-span-2 bg-indigo-600 rounded-3xl p-8 flex items-center justify-between relative overflow-hidden group fade-in-up delay-500 cursor-pointer hover:bg-indigo-700 transition-colors">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
           <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-colors"></div>
           
           <div className="relative z-10">
             <h2 className="text-2xl font-bold text-white mb-1">Let's work together.</h2>
-            <p className="text-indigo-200 text-sm font-medium">Open for opportunities.</p>
+            <p className="text-indigo-200 text-sm font-medium">Open for Fall 2025 Opportunities.</p>
           </div>
 
-          <div className="relative z-10 bg-white text-indigo-600 p-4 rounded-full hover:scale-110 transition-transform shadow-xl">
+          <a href="mailto:mmustafakamran@gmail.com" className="relative z-10 bg-white text-indigo-600 p-4 rounded-full hover:scale-110 transition-transform shadow-xl">
             <Mail size={24} />
-          </div>
+          </a>
         </div>
 
       </div>
