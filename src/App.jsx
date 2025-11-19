@@ -27,7 +27,7 @@ const DetailPanel = ({ detail, onClose }) => {
   return (
     <div className="mt-8 flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="w-full max-w-6xl relative bg-neutral-900/80 border border-neutral-800 rounded-3xl p-6 md:p-10 overflow-hidden shadow-2xl">
-        <div className={`absolute inset-0 ${detail.accent} opacity-20 blur-3xl pointer-events-none`} />
+        <div className={`absolute inset-0 ${detail.accent} opacity-60 blur-3xl pointer-events-none`} />
         <div className="absolute inset-0 rounded-3xl border border-white/5 pointer-events-none"></div>
         
         <div className="relative z-10 flex items-start justify-between gap-4 border-b border-neutral-800 pb-6 mb-8">
@@ -135,7 +135,7 @@ const Portfolio = () => {
       badge: 'Profile Insight',
       title: 'About Me',
       subtitle: 'Final-year CS student building AI-first products with practical impact.',
-      accent: 'bg-gradient-to-r from-indigo-500/30 via-purple-500/10 to-transparent',
+      accent: 'bg-gradient-to-r from-indigo-500/50 via-purple-500/20 to-transparent',
       body: [
         <div key="profile-grid" className="grid md:grid-cols-[220px_minmax(0,1fr)] gap-10 items-start">
           <div className="w-full flex flex-col items-center text-center md:text-left">
@@ -178,7 +178,7 @@ const Portfolio = () => {
       badge: 'Journey',
       title: 'Professional Experience',
       subtitle: 'Impact snapshots from internships and leadership roles.',
-      accent: 'bg-gradient-to-r from-indigo-500/30 via-slate-900 to-transparent',
+      accent: 'bg-gradient-to-r from-indigo-500/50 via-slate-900/80 to-transparent',
       body: [
         <div key="experience" className="space-y-10 relative">
           <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-neutral-800"></div>
@@ -211,7 +211,7 @@ const Portfolio = () => {
       badge: 'Case Studies',
       title: 'Projects',
       subtitle: 'A sampling of AI, automation, and platform builds.',
-      accent: 'bg-gradient-to-r from-emerald-500/20 via-transparent to-sky-500/20',
+      accent: 'bg-gradient-to-r from-emerald-500/50 via-transparent to-sky-500/30',
       body: [
         <div key="projects" className="grid grid-cols-1 gap-6">
           {projectItems.map((project) => (
@@ -249,7 +249,7 @@ const Portfolio = () => {
       badge: 'Capability Map',
       title: 'Technical Stack',
       subtitle: 'Tools I ship with daily—front to back, infra included.',
-      accent: 'bg-gradient-to-r from-sky-500/20 via-transparent to-violet-500/20',
+      accent: 'bg-gradient-to-r from-sky-500/50 via-transparent to-violet-500/30',
       body: [
         <div key="stack-grid" className="grid md:grid-cols-2 gap-4">
           {[
@@ -281,7 +281,7 @@ const Portfolio = () => {
       badge: 'Let’s Talk',
       title: 'Contact',
       subtitle: 'Reach out for collaborations, internships, or freelance gigs.',
-      accent: 'bg-gradient-to-r from-indigo-500/30 via-transparent to-purple-500/20',
+      accent: 'bg-gradient-to-r from-indigo-500/50 via-transparent to-purple-500/30',
       body: [
         <div key="contact" className="grid md:grid-cols-2 gap-8">
           <div className="space-y-6">
@@ -368,7 +368,19 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 md:pl-24 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative">
+    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 md:pl-24 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative overflow-hidden">
+      {/* Coding-themed background accent */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }}></div>
+      </div>
 
       {/* Minimal left nav */}
       <div className="hidden md:block fixed top-1/2 left-6 -translate-y-1/2 z-20">
@@ -441,15 +453,15 @@ const Portfolio = () => {
         }
       `}</style>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 auto-rows-[180px]">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 auto-rows-[180px] relative z-10">
 
         {/* --- 1. HERO PROFILE (2x2) --- */}
         <div 
           onClick={() => toggleTile('profile')}
           className={`col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden group fade-in-up cursor-pointer transition-all duration-300 ${selectedTile === 'profile' ? 'border-indigo-500 ring-1 ring-indigo-500/50' : 'border-neutral-800 hover:border-neutral-600'}`}
         >
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 group-hover:from-indigo-500/10 group-hover:to-purple-500/10 transition-colors duration-500"></div>
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl transition-all duration-500 group-hover:scale-110"></div>
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-indigo-500/10 via-transparent to-purple-500/10 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-colors duration-500"></div>
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/30 rounded-full blur-3xl transition-all duration-500 group-hover:scale-110"></div>
           
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-6">
@@ -506,7 +518,7 @@ const Portfolio = () => {
           onClick={() => toggleTile('experience')}
           className={`col-span-1 md:col-span-2 md:row-span-2 bg-neutral-900/50 border rounded-[2rem] p-8 flex flex-col relative group transition-all duration-300 fade-in-up delay-100 cursor-pointer ${selectedTile === 'experience' ? 'border-indigo-500 ring-1 ring-indigo-500/50' : 'border-neutral-800 hover:border-neutral-600'}`}
         >
-          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-indigo-900/10 via-transparent to-transparent opacity-50"></div>
+          <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-indigo-500/15 via-transparent to-transparent"></div>
           
           <div className="flex items-center justify-between mb-6 relative z-10">
             <h3 className="text-2xl font-bold text-white flex items-center gap-2">
@@ -541,8 +553,8 @@ const Portfolio = () => {
           onClick={() => toggleTile('projects')}
           className={`col-span-1 md:col-span-4 md:row-span-2 bg-gradient-to-br from-neutral-900 via-neutral-900/70 to-neutral-900/40 border rounded-3xl p-8 relative overflow-hidden group fade-in-up delay-200 cursor-pointer transition-all duration-300 ${selectedTile === 'projects' ? 'border-emerald-500 ring-1 ring-emerald-500/50' : 'border-neutral-800 hover:border-emerald-500/40'}`}
         >
-          <div className="absolute inset-0 opacity-40 group-hover:opacity-70 transition-opacity duration-500 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.25),_transparent_60%)]"></div>
-          <div className="absolute -bottom-12 -right-10 w-72 h-72 bg-emerald-500/20 blur-3xl rounded-full opacity-40"></div>
+          <div className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity duration-500 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.4),_transparent_60%)]"></div>
+          <div className="absolute -bottom-12 -right-10 w-72 h-72 bg-emerald-500/30 blur-3xl rounded-full opacity-60"></div>
           
           <div className="relative z-10 flex flex-col gap-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -660,7 +672,7 @@ const Portfolio = () => {
       </div>
 
       {/* --- DETAIL PANEL (Appears below grid) --- */}
-      <div ref={detailRef} className="scroll-mt-8">
+      <div ref={detailRef} className="scroll-mt-8 relative z-10">
         {activeDetail && (
           <DetailPanel 
             detail={activeDetail} 
