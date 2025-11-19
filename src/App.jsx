@@ -39,18 +39,6 @@ const Portfolio = () => {
         'Automated REST integrations (Google Ads, Meta Business Suite) processing 10K+ metrics daily with Python ETL.',
         'Implemented validation & deduplication layers that improved reporting accuracy by 95%.'
       ]
-    },
-    {
-      role: 'Head of Marketing',
-      company: 'Computing Society',
-      location: 'Islamabad, Pakistan',
-      year: 'Sep 2023 – Present',
-      active: false,
-      desc: 'Led cross-functional team of 18 members. Managed campaigns with 500K+ impressions.',
-      bullets: [
-        'Led 18-person team delivering 4 flagship tech events, including hackathons and tech talks.',
-        'Scaled digital campaigns to 500K+ impressions and 300% engagement growth.'
-      ]
     }
   ];
 
@@ -139,24 +127,24 @@ const Portfolio = () => {
       subtitle: 'Impact snapshots from internships and leadership roles.',
       accent: 'bg-gradient-to-r from-indigo-500 via-blue-500 to-transparent',
       body: (
-        <div className="space-y-12 relative">
+        <div className="space-y-8 relative">
           <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-neutral-800"></div>
           {experienceItems.map((job, i) => (
             <div key={job.role + i} className="relative pl-12">
               <div className="absolute left-0 top-2 w-6 h-6 rounded-full bg-neutral-900 border-2 border-indigo-500 z-10 shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
-              <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-sm font-mono text-indigo-400 mb-3">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 items-center text-sm font-mono text-indigo-400 mb-2">
                 <span className="font-bold text-white text-base">{job.company}</span>
                 <span className="text-neutral-600">•</span>
                 <span>{job.location}</span>
                 <span className="text-neutral-600">•</span>
                 <span className="text-neutral-300 bg-neutral-800/50 px-2 py-0.5 rounded">{job.year}</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-3">{job.role}</h3>
-              <p className="text-neutral-300 text-lg mb-6 italic font-light border-l-2 border-neutral-800 pl-4">{job.desc}</p>
-              <ul className="space-y-3">
+              <h3 className="text-xl font-bold text-white mb-2">{job.role}</h3>
+              <p className="text-neutral-300 text-base mb-4 italic font-light border-l-2 border-neutral-800 pl-4">{job.desc}</p>
+              <ul className="space-y-2">
                 {job.bullets.map((point, idx) => (
-                  <li key={idx} className="flex gap-4 text-neutral-400 leading-relaxed">
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-indigo-500/50 flex-shrink-0"></span>
+                  <li key={idx} className="flex gap-4 text-neutral-400 leading-relaxed text-sm">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-indigo-500/50 flex-shrink-0"></span>
                     {point}
                   </li>
                 ))}
@@ -172,18 +160,18 @@ const Portfolio = () => {
       subtitle: 'A sampling of AI, automation, and platform builds.',
       accent: 'bg-gradient-to-r from-emerald-500 via-teal-500 to-transparent',
       body: (
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-4">
           {projectItems.map((project) => (
-            <div key={project.title} className="bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 hover:bg-neutral-900/60 transition-colors group">
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <h3 className="text-2xl md:text-3xl font-bold text-white group-hover:text-emerald-400 transition-colors">{project.title}</h3>
+            <div key={project.title} className="bg-neutral-900/40 border border-neutral-800 rounded-3xl p-6 hover:bg-neutral-900/60 transition-colors group">
+              <div className="flex flex-wrap items-center gap-4 mb-4">
+                <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors">{project.title}</h3>
                 <div className="px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
                   Build
                 </div>
               </div>
-              <p className="text-neutral-300 text-lg mb-8 font-medium">{project.headline}</p>
+              <p className="text-neutral-300 text-base mb-6 font-medium">{project.headline}</p>
 
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags.map((tag) => (
                   <span key={tag} className="px-3 py-1.5 bg-neutral-950 rounded-lg text-xs border border-neutral-800 text-neutral-400 font-mono">
                     {tag}
@@ -191,7 +179,7 @@ const Portfolio = () => {
                 ))}
               </div>
 
-              <ul className="grid md:grid-cols-2 gap-4">
+              <ul className="grid md:grid-cols-2 gap-3">
                 {project.bullets.map((point, idx) => (
                   <li key={idx} className="flex gap-3 text-sm text-neutral-400 bg-neutral-900/50 p-3 rounded-xl border border-neutral-800/50">
                     <div className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
@@ -237,7 +225,7 @@ const Portfolio = () => {
       )
     },
     contact: {
-      badge: 'Let’s Talk',
+      badge: 'Let's Talk',
       title: 'Contact',
       subtitle: 'Reach out for collaborations, internships, or freelance gigs.',
       accent: 'bg-gradient-to-r from-indigo-500 via-violet-500 to-transparent',

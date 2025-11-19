@@ -14,7 +14,7 @@ const ProjectsTile = ({ onOpen, items }) => {
             <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-500/10 blur-[100px] rounded-full opacity-50 pointer-events-none"></div>
 
             <div className="relative z-10 flex flex-col h-full">
-                <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                     <div>
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -27,11 +27,11 @@ const ProjectsTile = ({ onOpen, items }) => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-auto grow">
                     {items.slice(0, 3).map((project, idx) => (
                         <div
                             key={project.title}
-                            className="bg-neutral-950/60 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3 hover:bg-neutral-900/80 hover:border-emerald-500/30 transition-all duration-300 group/card backdrop-blur-sm relative overflow-hidden"
+                            className="bg-neutral-950/60 border border-neutral-800 rounded-xl p-4 flex flex-col gap-3 hover:bg-neutral-900/80 hover:border-emerald-500/30 transition-all duration-300 group/card backdrop-blur-sm relative overflow-hidden h-full"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
 
@@ -42,9 +42,9 @@ const ProjectsTile = ({ onOpen, items }) => {
                                 <ArrowUpRight size={14} className="text-neutral-600 group-hover/card:text-emerald-400 transition-colors" />
                             </div>
 
-                            <div className="relative z-10">
+                            <div className="relative z-10 grow flex flex-col justify-center">
                                 <h4 className="text-white text-sm font-bold mb-1 group-hover/card:text-emerald-300 transition-colors">{project.title}</h4>
-                                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2 font-light h-8">
+                                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2 font-light">
                                     {project.headline}
                                 </p>
                             </div>
