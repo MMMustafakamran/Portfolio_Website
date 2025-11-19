@@ -25,8 +25,8 @@ const DetailPanel = ({ detail, onClose }) => {
   if (!detail) return null;
 
   return (
-    <div className="mt-8">
-      <div className="relative bg-neutral-900/80 border border-neutral-800 rounded-3xl p-6 md:p-10 overflow-hidden">
+    <div className="mt-8 flex justify-center">
+      <div className="w-full max-w-6xl relative bg-neutral-900/80 border border-neutral-800 rounded-3xl p-6 md:p-10 overflow-hidden">
         <div className={`absolute inset-0 ${detail.accent} opacity-40 blur-3xl pointer-events-none`} />
         <div className="absolute inset-0 rounded-3xl border border-white/5 pointer-events-none"></div>
         <div className="relative z-10 flex items-start justify-between gap-4">
@@ -135,23 +135,23 @@ const Portfolio = () => {
       subtitle: 'Final-year CS student building AI-first products with practical impact.',
       accent: 'bg-gradient-to-r from-indigo-500/30 via-purple-500/10 to-transparent',
       body: [
-        <div key="profile-grid" className="grid md:grid-cols-3 gap-8 items-start">
-          <div className="col-span-1">
+        <div key="profile-grid" className="grid md:grid-cols-[220px_minmax(0,1fr)] gap-10 items-start">
+          <div className="w-full flex flex-col items-center text-center md:text-left">
             <img 
               src="https://github.com/MMMustafaKamran.png" 
               alt="Profile" 
-              className="w-full rounded-2xl shadow-lg mb-4 border border-white/5"
+              className="w-full max-w-[200px] rounded-2xl shadow-lg mb-4 border border-white/5"
             />
             <div className="space-y-2 text-sm text-neutral-400">
-              <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-white">
+              <a href="https://github.com/MMMustafaKamran" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-white">
                 <Github size={18}/> @MMMustafaKamran
               </a>
-              <div className="flex items-center gap-2">
+              <div className="inline-flex items-center gap-2">
                 <Mail size={18}/> mmustafakamran@gmail.com
               </div>
             </div>
           </div>
-          <div className="col-span-2 space-y-4 text-lg leading-relaxed text-neutral-200">
+          <div className="space-y-4 text-lg leading-relaxed text-neutral-200">
             <p>
               I'm <strong>Muhammad Mustafa Kamran</strong>, obsessed with fusing modern AI (LLMs, RAG) with reliable backend systems. I enjoy orchestrating workflows that save hours for real teams.
             </p>
@@ -257,7 +257,51 @@ const Portfolio = () => {
           ))}
         </div>
       ]
-    }
+    },
+    contact: {
+      badge: 'Let’s Talk',
+      title: 'Contact',
+      subtitle: 'Reach out for collaborations, internships, or freelance gigs.',
+      accent: 'bg-gradient-to-r from-indigo-500/30 via-transparent to-purple-500/20',
+      body: [
+        <div key="contact" className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-300">Direct lines</h4>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 space-y-3">
+              <div className="text-neutral-400 text-sm">Email</div>
+              <a href="mailto:mmustafakamran@gmail.com" className="text-white text-lg font-semibold hover:text-indigo-300 transition-colors">
+                mmustafakamran@gmail.com
+              </a>
+              <p className="text-neutral-500 text-xs uppercase tracking-[0.3em]">Replies within 24h</p>
+            </div>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 space-y-3">
+              <div className="text-neutral-400 text-sm">LinkedIn</div>
+              <a href="https://linkedin.com/in/mustafaKamran03" target="_blank" rel="noreferrer" className="text-white text-lg font-semibold hover:text-indigo-300 transition-colors">
+                linkedin.com/in/mustafaKamran03
+              </a>
+              <p className="text-neutral-500 text-xs uppercase tracking-[0.3em]">DMs open</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h4 className="text-sm uppercase tracking-[0.4em] text-indigo-300">Social</h4>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 flex flex-col gap-3">
+              {[
+                { label: 'GitHub', href: 'https://github.com/MMMustafaKamran' },
+                { label: 'Twitter', href: 'https://twitter.com' },
+                { label: 'Portfolio', href: '#' },
+              ].map((link) => (
+                <a key={link.label} href={link.href} target="_blank" rel="noreferrer" className="text-neutral-300 hover:text-white transition-colors flex items-center gap-2">
+                  <ArrowUpRight size={14} /> {link.label}
+                </a>
+              ))}
+            </div>
+            <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-4 text-sm text-neutral-400">
+              Based in Islamabad (PKT) – open to remote and on-site work.
+            </div>
+          </div>
+        </div>,
+      ],
+    },
   };
 
   const toggleTile = (tile) => {
@@ -292,7 +336,36 @@ const Portfolio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 p-4 md:p-8 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a0a0a] text-neutral-200 md:pl-28 p-4 md:p-8 font-sans selection:bg-indigo-500/30 relative">
+
+      {/* Minimal left nav */}
+      <div className="fixed top-1/2 left-6 -translate-y-1/2 z-20">
+        <nav className="flex flex-col gap-4">
+          {[
+            { label: 'Profile', key: 'profile' },
+            { label: 'Experience', key: 'experience' },
+            { label: 'Projects', key: 'projects' },
+            { label: 'Stack', key: 'stack' },
+            { label: 'Contact', key: 'contact' },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => {
+                toggleTile(item.key);
+                if (item.key === 'contact') {
+                  document.getElementById('contact-tile')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="group relative flex items-center text-[11px] uppercase tracking-[0.3em] text-neutral-600 hover:text-white transition-all duration-300"
+            >
+              <span className="block w-2 h-2 rounded-full bg-neutral-600 transition-all duration-300 group-hover:w-6 group-hover:bg-white"></span>
+              <span className="ml-2 text-[10px] whitespace-nowrap text-neutral-500 opacity-70 transition-all duration-300 group-hover:text-white group-hover:opacity-100 group-hover:ml-3 group-hover:text-xs">
+                {item.label}
+              </span>
+            </button>
+          ))}
+        </nav>
+      </div>
       
       <style>{`
         @keyframes scroll {
@@ -355,12 +428,6 @@ const Portfolio = () => {
                  <div className="hidden w-full h-full bg-gradient-to-br from-indigo-600 to-violet-600 items-center justify-center text-white">
                    <Terminal size={32} /> 
                  </div>
-              </div>
-              <div className="bg-neutral-800/50 px-3 py-1 rounded-full border border-neutral-700 backdrop-blur-sm">
-                <span className="text-xs font-medium text-green-400 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                  Available for Work
-                </span>
               </div>
             </div>
 
@@ -533,22 +600,24 @@ const Portfolio = () => {
         </div>
 
         {/* --- 6. CONTACT CTA (compact) --- */}
-        <a 
-          href="mailto:mmustafakamran@gmail.com" 
+        <button 
+          type="button"
+          id="contact-tile"
+          onClick={() => toggleTile('contact')}
           className="col-span-1 md:col-span-1 bg-indigo-600 rounded-3xl p-4 flex items-center justify-between gap-4 relative overflow-hidden group fade-in-up delay-500 cursor-pointer hover:bg-indigo-700 transition-colors"
         >
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
           <div className="absolute -left-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors"></div>
           
-          <div className="relative z-10">
+          <div className="relative z-10 text-left">
             <h2 className="text-lg font-bold text-white mb-0.5">Let's collaborate</h2>
-            <p className="text-indigo-200 text-[11px] font-medium tracking-wide uppercase">Fall 2025 roles</p>
+            <p className="text-indigo-200 text-[11px] font-medium tracking-wide uppercase">Tap for contact details</p>
           </div>
 
-          <div className="relative z-10 bg-white text-indigo-600 p-2.5 rounded-2xl hover:scale-110 transition-transform shadow-xl">
+          <div className="relative z-10 bg-white text-indigo-600 p-2.5 rounded-2xl group-hover:scale-110 transition-transform shadow-xl">
             <Mail size={18} />
           </div>
-        </a>
+        </button>
 
       </div>
 
