@@ -59,6 +59,60 @@ body {
   background: linear-gradient(270deg, #0a0a0a 0%, rgba(10, 10, 10, 0) 100%);
 }
 
+/* Coding Background Accent */
+.bg-code-accent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 40px,
+      rgba(99, 102, 241, 0.08) 40px,
+      rgba(99, 102, 241, 0.08) 41px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(139, 92, 246, 0.06) 40px,
+      rgba(139, 92, 246, 0.06) 41px
+    );
+  background-size: 100% 100%;
+}
+
+.bg-code-accent::before {
+  content: '< />';
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 12rem;
+  color: rgba(99, 102, 241, 0.1);
+  transform: rotate(-15deg);
+  user-select: none;
+  font-weight: 300;
+}
+
+.bg-code-accent::after {
+  content: '{ }';
+  position: absolute;
+  bottom: 15%;
+  left: 8%;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 10rem;
+  color: rgba(139, 92, 246, 0.08);
+  transform: rotate(12deg);
+  user-select: none;
+  font-weight: 300;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

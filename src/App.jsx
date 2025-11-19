@@ -293,6 +293,7 @@ const Portfolio = () => {
       {/* Global Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-noise"></div>
+        <div className="absolute inset-0 bg-code-accent"></div>
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] opacity-50"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] opacity-50"></div>
       </div>
