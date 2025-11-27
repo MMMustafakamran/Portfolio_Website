@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Accessibility improvements */
+@layer base {
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-cyan-500 rounded;
+  }
+  
+  button:focus-visible,
+  a:focus-visible {
+    @apply ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-950;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
