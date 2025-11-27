@@ -47,18 +47,23 @@ const NavigationPoint = ({ point, smoothProgress, scrollToSection }) => {
             style={{ top: point.top, left: '50%' }}
             aria-label={`Navigate to ${point.label} section`}
         >
-            {/* The Dot on the road */}
+            {/* The Dot on the road with Icon inside */}
             <motion.div
                 style={{
                     backgroundColor,
                     borderColor
                 }}
-                className="w-3 h-3 rounded-full border-2 -ml-[6px] group-hover:scale-150 transition-transform cursor-pointer shadow-lg z-20 bg-slate-900"
-            />
+                className="w-8 h-8 rounded-full border-2 -ml-[16px] group-hover:scale-125 transition-transform cursor-pointer shadow-lg z-20 bg-slate-900 flex items-center justify-center relative"
+            >
+                <point.icon 
+                    size={14} 
+                    className="text-cyan-200 group-hover:text-cyan-400 transition-colors z-10"
+                    aria-hidden="true"
+                />
+            </motion.div>
 
-            {/* Tooltip Label (Shows on Hover) */}
-            <div className="absolute left-6 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2 text-[10px] font-mono tracking-widest text-cyan-200 bg-slate-900/90 px-2 py-1 rounded border border-slate-800 pointer-events-none whitespace-nowrap">
-                <point.icon size={12} aria-hidden="true" />
+            {/* Label (Always visible) - Text only */}
+            <div className="absolute left-6 opacity-100 transition-opacity text-[10px] font-mono tracking-widest text-cyan-200 bg-slate-900/90 px-2 py-1 rounded border border-slate-800 pointer-events-none whitespace-nowrap">
                 {point.label}
             </div>
         </button>
@@ -92,18 +97,18 @@ export default function PixelPilotPortfolio() {
     const hasSetWalkingDialogueRef = useRef(false);
 
     // Avatar Position Logic for Landing
-    // Avatar starts inside the avatar frame (left column ~25%) and moves to left sidebar (8%) as user scrolls
-    const avatarXLanding = `${34 - (landingProgress * 17)}%`; // 25% (inside frame) -> 8% (sidebar)
-    const avatarYLanding = "50%"; // Stay at 50% vertically during landing transition
+    // Avatar starts inside the avatar frame (left column ~34%) and moves to left sidebar (8%) and first checkpoint (15%) as user scrolls
+    const avatarXLanding = `${34 - (landingProgress * 26)}%`; // 34% (inside frame) -> 8% (sidebar)
+    const avatarYLanding = `${50 - (landingProgress * 35)}%`; // 50% (center) -> 15% (first checkpoint - hero)
 
     const avatarX = useTransform(smoothProgress,
-        [0, 0.25, 0.5, 0.75, 1],
-        ["8%", "8%", "8%", "8%", "8%"]
+        [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
+        ["8%", "8%", "8%", "8%", "8%", "8%", "8%"]
     );
 
     const avatarY = useTransform(smoothProgress,
-        [0, 0.25, 0.5, 0.75, 1],
-        ["15%", "35%", "55%", "75%", "92%"]
+        [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
+        ["15%", "15%", "35%", "55%", "75%", "92%", "92%"]
     );
 
     const finalAvatarX = isLandingLocked ? avatarXLanding : avatarX;
@@ -171,18 +176,21 @@ export default function PixelPilotPortfolio() {
         let newState = avatarState;
         let newDialogue = avatarDialogue;
         
-        // Update based on section - maintain animation throughout section
-        // Using slightly different thresholds with buffer zones to prevent rapid switching
-        if (progress < 0.25) {
+        // Update based on section - match checkpoint progress values
+        // Using checkpoint progress values for consistency
+        if (progress < 0.12) {
             newState = 'idle';
             newDialogue = "I build scalable backend systems.";
-        } else if (progress < 0.50) {
+        } else if (progress < 0.37) {
             newState = 'reading';
             newDialogue = "Here are the tools I use to build.";
-        } else if (progress < 0.75) {
+        } else if (progress < 0.62) {
             newState = 'working';
             newDialogue = "Check out some of my recent projects.";
-        } else if (progress < 0.92) {
+        } else if (progress < 0.82) {
+            newState = 'reading';
+            newDialogue = "My professional journey so far.";
+        } else if (progress < 0.96) {
             newState = 'reading';
             newDialogue = "My professional journey so far.";
         } else {
@@ -231,7 +239,7 @@ export default function PixelPilotPortfolio() {
             </motion.div>
 
             {/* --- MINIMAL SIDEBAR (Navigation Rail) --- */}
-            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-40" style={{ opacity: isLandingLocked ? 0 : 1, transition: 'opacity 0.5s' }}>
+            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-40" style={{ opacity: 1, transition: 'opacity 0.5s' }}>
 
                 <div className="relative h-full w-full flex justify-center">
 
