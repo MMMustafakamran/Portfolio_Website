@@ -1,237 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, useTransform, useVelocity, useMotionValueEvent } from 'framer-motion';
 import { Github, Linkedin, Mail, Terminal, Cpu, Globe, ExternalLink, Code2, ChevronDown, User, Layers, Briefcase, Clock, Send, BookOpen, Monitor } from 'lucide-react';
-
-// --- PIXEL ART AVATAR (Static Gliding / Interactive) ---
-
-const PixelAvatar = ({ state }) => {
-    // Enhanced Palette
-    const skin = "#8D5524";
-    const skinShadow = "#6F431B";
-    const hair = "#0F172A";
-    const hairHighlight = "#1E293B";
-    const glassesFrame = "#000000";
-    const glassesLens = "#38BDF8";
-    const jacket = "#334155";
-    const jacketShadow = "#1E293B";
-    const jacketHighlight = "#475569";
-    const shirt = "#F8FAFC";
-    const shirtShadow = "#CBD5E1";
-    const pants = "#1E293B";
-    const shoes = "#000000";
-
-    // Animation States
-    const [idleAction, setIdleAction] = useState('none');
-    const [idleTimer, setIdleTimer] = useState(0);
-
-    // Idle Timer System
-    useEffect(() => {
-        if (state === 'idle') {
-            const timer = setInterval(() => {
-                setIdleTimer(prev => prev + 1);
-            }, 1000);
-            return () => clearInterval(timer);
-        } else {
-            setIdleTimer(0);
-            setIdleAction('none');
-        }
-    }, [state]);
-
-    // Trigger Idle Action after 5 seconds
-    useEffect(() => {
-        if (idleTimer === 5) {
-            const actions = ['gameboy', 'coffee', 'sleep'];
-            const randomAction = actions[Math.floor(Math.random() * actions.length)];
-            setIdleAction(randomAction);
-        }
-    }, [idleTimer]);
-
-    // --- SUB-COMPONENTS ---
-
-    const HeadFront = () => (
-        <g>
-            {/* Neck */}
-            <rect x="29" y="34" width="6" height="4" fill={skinShadow} />
-            {/* Face */}
-            <rect x="24" y="10" width="16" height="24" fill={skin} />
-            <rect x="22" y="14" width="20" height="16" fill={skin} />
-            <rect x="23" y="14" width="1" height="4" fill={skinShadow} />
-            {/* Hair */}
-            <rect x="22" y="8" width="20" height="6" fill={hair} />
-            <rect x="24" y="8" width="8" height="2" fill={hairHighlight} />
-            <rect x="20" y="10" width="4" height="8" fill={hair} />
-            <rect x="40" y="10" width="4" height="8" fill={hair} />
-            <rect x="26" y="6" width="4" height="2" fill={hair} />
-            <rect x="34" y="6" width="4" height="2" fill={hair} />
-            {/* Glasses */}
-            <rect x="23" y="18" width="18" height="2" fill={glassesFrame} />
-            <rect x="23" y="18" width="6" height="5" fill={glassesLens} opacity="0.6" />
-            <rect x="24" y="19" width="2" height="2" fill="white" opacity="0.4" />
-            <rect x="35" y="18" width="6" height="5" fill={glassesLens} opacity="0.6" />
-            <rect x="36" y="19" width="2" height="2" fill="white" opacity="0.4" />
-            <rect x="23" y="18" width="1" height="5" fill={glassesFrame} />
-            <rect x="29" y="18" width="1" height="5" fill={glassesFrame} />
-            <rect x="34" y="18" width="1" height="5" fill={glassesFrame} />
-            <rect x="40" y="18" width="1" height="5" fill={glassesFrame} />
-            <rect x="30" y="19" width="4" height="1" fill={glassesFrame} />
-        </g>
-    );
-
-    const LegsStanding = () => (
-        <g>
-            <rect x="24" y="56" width="6" height="16" fill={pants} />
-            <rect x="34" y="56" width="6" height="16" fill={pants} />
-            <rect x="23" y="72" width="8" height="3" fill={shoes} />
-            <rect x="34" y="72" width="8" height="3" fill={shoes} />
-        </g>
-    );
-
-    // --- RENDER LOGIC ---
-
-    if (state === 'walking' || (state === 'idle' && idleAction === 'none')) {
-        return (
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" className="drop-shadow-2xl">
-                <HeadFront />
-                {/* Front Body */}
-                <rect x="22" y="36" width="20" height="20" fill={jacket} />
-                <rect x="30" y="36" width="4" height="20" fill={shirt} />
-                <rect x="30" y="36" width="1" height="20" fill={shirtShadow} />
-                <rect x="22" y="36" width="2" height="20" fill={jacketHighlight} />
-                <rect x="40" y="36" width="2" height="20" fill={jacketHighlight} />
-                <rect x="23" y="48" width="4" height="1" fill={jacketShadow} />
-                <rect x="37" y="48" width="4" height="1" fill={jacketShadow} />
-
-                {/* Arms Hanging */}
-                <rect x="18" y="38" width="4" height="16" fill={jacket} />
-                <rect x="18" y="54" width="4" height="4" fill={skin} />
-                <rect x="42" y="38" width="4" height="16" fill={jacket} />
-                <rect x="42" y="54" width="4" height="4" fill={skin} />
-
-                <LegsStanding />
-            </svg>
-        );
-    }
-
-    if (state === 'idle') {
-        let idleContent = null;
-        let extraElements = null;
-
-        if (idleAction === 'gameboy') {
-            idleContent = (
-                <g>
-                    <rect x="20" y="42" width="10" height="4" fill={jacket} />
-                    <rect x="34" y="42" width="10" height="4" fill={jacket} />
-                    <rect x="28" y="40" width="8" height="10" fill="#94A3B8" />
-                    <rect x="29" y="42" width="6" height="4" fill="#10B981" />
-                    <rect x="26" y="42" width="2" height="4" fill={skin} />
-                    <rect x="36" y="42" width="2" height="4" fill={skin} />
-                </g>
-            );
-        } else if (idleAction === 'coffee') {
-            idleContent = (
-                <g>
-                    <rect x="18" y="38" width="4" height="16" fill={jacket} />
-                    <rect x="18" y="54" width="4" height="4" fill={skin} />
-                    <rect x="42" y="38" width="4" height="10" fill={jacket} />
-                    <rect x="40" y="48" width="8" height="2" fill={jacket} />
-                    <rect x="38" y="44" width="6" height="8" fill="#F8FAFC" />
-                    <rect x="42" y="46" width="2" height="4" fill="#F8FAFC" />
-                    <rect x="40" y="48" width="4" height="4" fill={skin} />
-                    <g className="animate-pulse">
-                        <rect x="39" y="40" width="1" height="3" fill="#FFF" opacity="0.5" />
-                        <rect x="41" y="38" width="1" height="3" fill="#FFF" opacity="0.5" />
-                    </g>
-                </g>
-            );
-        } else if (idleAction === 'sleep') {
-            extraElements = (
-                <g className="animate-bounce" style={{ animationDuration: '3s' }}>
-                    <text x="45" y="10" fontFamily="monospace" fontSize="8" fill="white" opacity="0.8">Z</text>
-                    <text x="52" y="6" fontFamily="monospace" fontSize="6" fill="white" opacity="0.6">z</text>
-                </g>
-            );
-            idleContent = (
-                <g>
-                    <rect x="18" y="38" width="4" height="16" fill={jacket} />
-                    <rect x="42" y="38" width="4" height="16" fill={jacket} />
-                    <rect x="18" y="54" width="4" height="4" fill={skin} />
-                    <rect x="42" y="54" width="4" height="4" fill={skin} />
-                    <rect x="24" y="14" width="16" height="20" fill={hair} /> {/* Head Bowed */}
-                </g>
-            );
-        }
-
-        return (
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" className="drop-shadow-xl">
-                {extraElements}
-                {idleAction === 'sleep' ? null : <HeadFront />}
-                <rect x="22" y="36" width="20" height="20" fill={jacket} />
-                <rect x="30" y="36" width="4" height="20" fill={shirt} />
-                <rect x="30" y="36" width="1" height="20" fill={shirtShadow} />
-                <rect x="22" y="36" width="2" height="20" fill={jacketHighlight} />
-                <rect x="40" y="36" width="2" height="20" fill={jacketHighlight} />
-                <rect x="23" y="48" width="4" height="1" fill={jacketShadow} />
-                <rect x="37" y="48" width="4" height="1" fill={jacketShadow} />
-                <LegsStanding />
-                {idleContent}
-            </svg>
-        );
-    }
-
-    // Fallback for Working/Reading/Contact
-    if (state === 'working') {
-        return (
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" className="drop-shadow-xl">
-                <HeadFront />
-                <rect x="16" y="50" width="32" height="2" fill="#334155" />
-                <rect x="22" y="36" width="20" height="16" fill={jacket} />
-                <rect x="30" y="36" width="4" height="16" fill={shirt} />
-                <rect x="22" y="52" width="20" height="6" fill={pants} />
-                <rect x="20" y="36" width="24" height="14" fill="#1E293B" />
-                <rect x="28" y="40" width="8" height="8" fill="#06B6D4" opacity="0.5" />
-                <rect x="18" y="44" width="4" height="8" fill={jacket} />
-                <rect x="42" y="44" width="4" height="8" fill={jacket} />
-                <rect x="20" y="51" width="6" height="3" fill={skin} />
-                <rect x="38" y="51" width="6" height="3" fill={skin} />
-            </svg>
-        );
-    }
-
-    if (state === 'reading') {
-        return (
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" className="drop-shadow-xl">
-                <HeadFront />
-                <rect x="22" y="36" width="20" height="20" fill={jacket} />
-                <rect x="30" y="36" width="4" height="20" fill={shirt} />
-                <LegsStanding />
-                <rect x="24" y="48" width="16" height="12" fill="#F1F5F9" />
-                <rect x="24" y="48" width="2" height="12" fill="#475569" />
-                <rect x="38" y="48" width="2" height="12" fill="#475569" />
-                <rect x="20" y="38" width="4" height="12" fill={jacket} />
-                <rect x="40" y="38" width="4" height="12" fill={jacket} />
-                <rect x="22" y="50" width="4" height="4" fill={skin} />
-                <rect x="38" y="50" width="4" height="4" fill={skin} />
-            </svg>
-        );
-    }
-
-    // Contact State
-    return (
-        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" className="drop-shadow-xl">
-            <HeadFront />
-            <rect x="22" y="36" width="20" height="20" fill={jacket} />
-            <rect x="30" y="36" width="4" height="20" fill={shirt} />
-            <LegsStanding />
-            <rect x="18" y="38" width="4" height="14" fill={jacket} />
-            <rect x="42" y="38" width="4" height="14" fill={jacket} />
-            <rect x="26" y="46" width="12" height="8" fill="#F8FAFC" />
-            <rect x="34" y="48" width="2" height="2" fill="#EF4444" />
-            <rect x="24" y="48" width="4" height="4" fill={skin} />
-            <rect x="36" y="48" width="4" height="4" fill={skin} />
-        </svg>
-    );
-};
-
+import PixelAvatar from './components/PixelAvatar';
 
 // --- SECTION WRAPPER ---
 const SectionWrapper = ({ children, id, className }) => {
@@ -262,27 +32,50 @@ export default function PixelPilotPortfolio() {
     });
 
     const [avatarState, setAvatarState] = useState('idle');
+    const [avatarDialogue, setAvatarDialogue] = useState('');
 
-    // Logic to determine Avatar State
+    // Avatar Position Logic
+    // We'll use fixed positioning relative to the viewport, but controlled by scroll progress
+    // to simulate "walking" through the page.
+
+    // X Position: Moves from center (Hero) to side (Stack) and stays there
+    const avatarX = useTransform(smoothProgress,
+        [0, 0.1, 0.2, 0.8, 1],
+        ["50%", "50%", "10%", "10%", "50%"] // Center -> Center -> Left -> Left -> Center
+    );
+
+    // Y Position: Moves down slightly as we scroll
+    const avatarY = useTransform(smoothProgress,
+        [0, 0.2, 0.8, 1],
+        ["20%", "50%", "50%", "80%"]
+    );
+
+    // Logic to determine Avatar State and Dialogue
     useMotionValueEvent(scrollY, "change", (latest) => {
         const velocity = scrollVelocity.get();
+        const progress = scrollYProgress.get();
 
-        // 1. Sliding State
-        if (Math.abs(velocity) > 10) {
+        // 1. Sliding/Walking State
+        if (Math.abs(velocity) > 5) {
             setAvatarState('walking');
+            setAvatarDialogue(''); // Silence while moving
         } else {
-            const progress = scrollYProgress.get();
             const timer = setTimeout(() => {
-                if (progress < 0.15) {
+                if (progress < 0.1) {
                     setAvatarState('idle');
-                } else if (progress < 0.35) {
+                    setAvatarDialogue("Hi! I'm Mustafa, welcome to my portfolio.");
+                } else if (progress < 0.3) {
                     setAvatarState('reading');
-                } else if (progress < 0.75) {
+                    setAvatarDialogue("Here are the tools I use to build.");
+                } else if (progress < 0.6) {
                     setAvatarState('working');
-                } else if (progress < 0.90) {
+                    setAvatarDialogue("Check out some of my recent projects.");
+                } else if (progress < 0.85) {
                     setAvatarState('reading');
+                    setAvatarDialogue("My professional journey so far.");
                 } else {
                     setAvatarState('contact');
+                    setAvatarDialogue("Let's build something together!");
                 }
             }, 200);
             return () => clearTimeout(timer);
@@ -297,10 +90,25 @@ export default function PixelPilotPortfolio() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-500 selection:text-slate-900">
+        <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-cyan-500 selection:text-slate-900 overflow-x-hidden">
+
+            {/* --- AVATAR OVERLAY --- */}
+            <motion.div
+                style={{
+                    left: avatarX,
+                    top: avatarY,
+                    x: "-50%", // Center the avatar on its coordinate
+                    y: "-50%"
+                }}
+                className="fixed z-50 pointer-events-none hidden md:block transition-all duration-500 ease-out"
+            >
+                <div className="transform scale-150">
+                    <PixelAvatar state={avatarState} dialogue={avatarDialogue} />
+                </div>
+            </motion.div>
 
             {/* --- MINIMAL SIDEBAR (Navigation Rail) --- */}
-            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-50">
+            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-40">
 
                 <div className="relative h-full w-full flex justify-center">
 
@@ -343,16 +151,6 @@ export default function PixelPilotPortfolio() {
                             </div>
                         </button>
                     ))}
-
-                    {/* THE AVATAR (Slider) */}
-                    <motion.div
-                        style={{ top: useTransform(smoothProgress, [0, 1], ["5%", "95%"]) }}
-                        className="absolute z-30 pointer-events-none"
-                    >
-                        <div className="relative -left-[32px] -top-[32px] transition-transform duration-200">
-                            <PixelAvatar state={avatarState} />
-                        </div>
-                    </motion.div>
 
                 </div>
             </div>
@@ -400,7 +198,7 @@ export default function PixelPilotPortfolio() {
                     <motion.div
                         animate={{ y: [0, 10, 0] }}
                         transition={{ repeat: Infinity, duration: 2 }}
-                        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 lg:hidden"
+                        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500"
                     >
                         <ChevronDown />
                     </motion.div>
@@ -411,7 +209,7 @@ export default function PixelPilotPortfolio() {
                     <h2 className="text-sm font-mono text-cyan-500 mb-8 uppercase tracking-widest flex items-center gap-2">
                         <Layers size={14} /> Tech Stack
                     </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pl-0 md:pl-32"> {/* Added padding-left for avatar space */}
                         {['JavaScript', 'TypeScript', 'Python', 'React', 'Django REST', 'Node.js', 'PostgreSQL', 'Docker', 'LLMs', 'RAG', 'Tailwind', 'Framer Motion'].map((tech, i) => (
                             <motion.div
                                 key={tech}
@@ -427,12 +225,12 @@ export default function PixelPilotPortfolio() {
 
                 {/* SECTION 3: WORK */}
                 <SectionWrapper id="projects" className="px-6 md:px-20 py-32">
-                    <div className="mb-16 flex items-end gap-4">
+                    <div className="mb-16 flex items-end gap-4 pl-0 md:pl-32">
                         <h2 className="text-4xl md:text-6xl font-bold">Selected Work</h2>
                         <div className="h-4 w-4 rounded-full bg-cyan-500 mb-2 animate-pulse"></div>
                     </div>
 
-                    <div className="space-y-32">
+                    <div className="space-y-32 pl-0 md:pl-32">
                         {/* Project 1 */}
                         <div className="group relative grid md:grid-cols-12 gap-8 items-center">
                             <div className="md:col-span-7 relative z-10">
@@ -516,10 +314,10 @@ export default function PixelPilotPortfolio() {
 
                 {/* SECTION 4: EXPERIENCE */}
                 <SectionWrapper id="experience" className="px-6 md:px-20 py-24 bg-slate-900/20">
-                    <h2 className="text-3xl font-bold mb-16 flex items-center gap-4">
+                    <h2 className="text-3xl font-bold mb-16 flex items-center gap-4 pl-0 md:pl-32">
                         <Clock className="text-cyan-500" /> Experience
                     </h2>
-                    <div className="space-y-16 border-l-2 border-slate-800 ml-3 pl-10 relative">
+                    <div className="space-y-16 border-l-2 border-slate-800 ml-3 pl-10 relative md:ml-32">
                         {[
                             { role: 'Software Engineering Intern', company: 'CARE', time: 'Jun 2025 - Aug 2025', desc: 'Engineered AI call automation agents with RAG & n8n. Reduced manual processing by 70%. Integrated LLMs with Retrieval-Augmented Generation workflows handling 1K+ daily interactions.' },
                             { role: 'Software Engineering Intern', company: 'ElementalTV', time: 'May 2025 - Jun 2025', desc: 'Built auto-data pipelines for AdOps processing 10k+ daily metrics. Automated REST integrations (Google Ads, Meta Business Suite) with Python ETL.' }
