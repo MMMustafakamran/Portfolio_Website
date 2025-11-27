@@ -6,7 +6,15 @@ import PixelAvatar from './components/PixelAvatar';
 // --- SECTION WRAPPER ---
 const SectionWrapper = ({ children, id, className }) => {
     return (
-        <section id={id} className={`min-h-screen flex flex-col justify-center ${className}`}>
+        <section id={id} className={`min-h-screen flex flex-col justify-center relative ${className}`}>
+            {/* Dotted Border Top */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" style={{
+                backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(6, 182, 212, 0.3) 8px, rgba(6, 182, 212, 0.3) 16px)'
+            }} aria-hidden="true"></div>
+            {/* Dotted Border Bottom */}
+            <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" style={{
+                backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(6, 182, 212, 0.3) 8px, rgba(6, 182, 212, 0.3) 16px)'
+            }} aria-hidden="true"></div>
             <motion.div
                 initial={{ opacity: 0, y: 50, scale: 0.98 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -126,10 +134,18 @@ export default function PixelPilotPortfolio() {
                     if (newProgress >= 1 && prev < 1) {
                         // Small delay to ensure avatar reaches position
                         setTimeout(() => {
+                            const backendDialogue = "I build scalable backend systems.";
+                            // Update refs FIRST to prevent flickering when scroll handler starts
+                            previousDialogueRef.current = backendDialogue;
+                            previousStateRef.current = 'idle';
+                            lastUpdateTimeRef.current = Date.now() + 200; // Add extra buffer
+                            hasSetWalkingDialogueRef.current = false; // Reset for next time
+                            
+                            // Then update state
                             setIsLandingLocked(false);
                             setAvatarState('idle');
-                            setAvatarDialogue("I build scalable backend systems.");
-                            hasSetWalkingDialogueRef.current = false; // Reset for next time
+                            setAvatarDialogue(backendDialogue);
+                            
                             // Smooth scroll to hero section
                             document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
                         }, 300);
@@ -148,9 +164,9 @@ export default function PixelPilotPortfolio() {
     useMotionValueEvent(scrollYProgress, "change", (progress) => {
         if (isLandingLocked) return;
 
-        // Debounce updates to prevent flickering (only update every 100ms)
+        // Debounce updates to prevent flickering (only update every 150ms)
         const now = Date.now();
-        if (now - lastUpdateTimeRef.current < 100) return;
+        if (now - lastUpdateTimeRef.current < 150) return;
         
         let newState = avatarState;
         let newDialogue = avatarDialogue;
@@ -175,7 +191,9 @@ export default function PixelPilotPortfolio() {
         }
         
         // Only update if state or dialogue actually changed
-        if (newState !== previousStateRef.current || newDialogue !== previousDialogueRef.current) {
+        // Also check if dialogue is different from current to prevent unnecessary updates
+        if ((newState !== previousStateRef.current || newDialogue !== previousDialogueRef.current) &&
+            newDialogue !== avatarDialogue) {
             previousStateRef.current = newState;
             previousDialogueRef.current = newDialogue;
             lastUpdateTimeRef.current = now;
@@ -297,17 +315,14 @@ export default function PixelPilotPortfolio() {
                     {/* Main Content - Split Layout */}
                     <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
-                            {/* Left Side - Avatar Placeholder/Frame (fades out as avatar moves) */}
+                            {/* Left Side - Avatar Frame (stays visible) */}
                             <motion.div
                                 initial={{ opacity: 0, x: -50 }}
-                                animate={{ 
-                                    opacity: isLandingLocked && landingProgress < 0.3 ? 1 : 0,
-                                    x: 0 
-                                }}
+                                animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 className="hidden md:flex flex-col items-center justify-center relative"
                             >
-                                {/* Pixel Art Frame - Shows initially, fades as avatar walks */}
+                                {/* Pixel Art Frame - Always visible */}
                                 <div className="relative">
                                     {/* Pixel border effect */}
                                     <div className="absolute -inset-4 border-4 border-cyan-500/30" style={{
@@ -331,10 +346,7 @@ export default function PixelPilotPortfolio() {
                                 {/* Scroll Indicator Below Avatar Frame */}
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
-                                    animate={{ 
-                                        opacity: isLandingLocked && landingProgress < 0.3 ? 1 : 0,
-                                        y: 0 
-                                    }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.6, delay: 1.2 }}
                                     className="mt-8 flex flex-col items-center gap-3"
                                 >

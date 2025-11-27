@@ -143,15 +143,15 @@ const PixelAvatar = ({ state, dialogue }) => {
     const SpeechBubble = ({ text }) => (
         <motion.div
             key={text}
-            initial={{ opacity: 0, scale: 0.8, x: 5 }}
+            initial={{ opacity: 0, scale: 0.8, x: -5 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: 5 }}
+            exit={{ opacity: 0, scale: 0.8, x: -5 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute left-full ml-1 bg-white text-slate-900 px-2 py-1.5 rounded-lg shadow-xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
+            className="absolute right-full mr-1 bg-white text-slate-900 px-2 py-1.5 rounded-lg shadow-xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
             style={{ top: '28px' }}
         >
             <p className="font-mono text-[10px] font-bold leading-tight">{text}</p>
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full w-2 h-2 bg-white border-l-2 border-b-2 border-slate-900 transform rotate-45"></div>
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-2 h-2 bg-white border-r-2 border-b-2 border-slate-900 transform rotate-[-45deg]"></div>
         </motion.div>
     );
 
