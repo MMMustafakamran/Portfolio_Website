@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const PixelAvatar = ({ state, dialogue }) => {
     const skin = "#8D5524";
@@ -14,7 +13,7 @@ const PixelAvatar = ({ state, dialogue }) => {
     const shirt = "#F8FAFC";
     const shirtShadow = "#CBD5E1";
     const pants = "#1E293B";
-    const shoes = "#000000";
+    const shoes = "#654321"; // Dark brown
 
     const [idleAction, setIdleAction] = useState('none');
     const [idleTimer, setIdleTimer] = useState(0);
@@ -141,18 +140,24 @@ const PixelAvatar = ({ state, dialogue }) => {
     );
 
     const SpeechBubble = ({ text }) => (
-        <motion.div
-            key={text}
-            initial={{ opacity: 0, scale: 0.8, x: -5 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: -5 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute right-full mr-1 bg-white text-slate-900 px-2 py-1.5 rounded-lg shadow-xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
-            style={{ top: '28px' }}
+        <div
+            className="absolute left-full ml-1 bg-white text-slate-900 px-3 py-2 rounded-2xl shadow-2xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
+            style={{ top: '20px', transform: 'translateX(-16px)' }}
         >
             <p className="font-mono text-[10px] font-bold leading-tight">{text}</p>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-full w-2 h-2 bg-white border-r-2 border-b-2 border-slate-900 transform rotate-[-45deg]"></div>
-        </motion.div>
+            {/* Speech bubble tail pointing to avatar - longer */}
+            <div 
+                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
+                style={{
+                    width: 0,
+                    height: 0,
+                    borderTop: '8px solid transparent',
+                    borderBottom: '8px solid transparent',
+                    borderRight: '12px solid white',
+                    filter: 'drop-shadow(2px 0 0px rgba(15, 23, 42, 1))'
+                }}
+            ></div>
+        </div>
     );
 
     const renderAvatarBody = () => {
@@ -222,9 +227,7 @@ const PixelAvatar = ({ state, dialogue }) => {
 
     return (
         <div className="relative">
-            <AnimatePresence mode="wait">
-                {dialogue && <SpeechBubble key={dialogue} text={dialogue} />}
-            </AnimatePresence>
+            {dialogue && <SpeechBubble text={dialogue} />}
             <svg width="64" height="80" viewBox="0 0 64 80" fill="none" className="drop-shadow-2xl">
                 {renderAvatarBody()}
             </svg>
