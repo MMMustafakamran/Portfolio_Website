@@ -95,14 +95,16 @@ const PixelAvatar = ({ state, dialogue }) => {
 
     const ArmsWaving = () => (
         <g>
+            {/* Left arm (static) */}
             <rect x="18" y="38" width="4" height="16" fill={jacket} />
             <rect x="18" y="54" width="4" height="4" fill={skin} />
+            {/* Right arm (waving - starts at 180°, rotates clockwise to 270°) */}
             <g>
                 <animateTransform
                     attributeName="transform"
                     type="rotate"
-                    values="0 42 38; -45 42 38; 0 42 38; -45 42 38; 0 42 38"
-                    dur="1.5s"
+                    values="180 44 38; 270 44 38; 180 44 38"
+                    dur="1.2s"
                     repeatCount="indefinite"
                 />
                 <rect x="42" y="38" width="4" height="16" fill={jacket} />
@@ -140,10 +142,12 @@ const PixelAvatar = ({ state, dialogue }) => {
 
     const SpeechBubble = ({ text }) => (
         <motion.div
+            key={text}
             initial={{ opacity: 0, scale: 0.8, x: 5 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.8, x: 5 }}
-            className="absolute left-full ml-3 bg-white text-slate-900 px-2 py-1.5 rounded-lg shadow-xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute left-full ml-1 bg-white text-slate-900 px-2 py-1.5 rounded-lg shadow-xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
             style={{ top: '28px' }}
         >
             <p className="font-mono text-[10px] font-bold leading-tight">{text}</p>
@@ -218,8 +222,8 @@ const PixelAvatar = ({ state, dialogue }) => {
 
     return (
         <div className="relative">
-            <AnimatePresence>
-                {dialogue && <SpeechBubble text={dialogue} />}
+            <AnimatePresence mode="wait">
+                {dialogue && <SpeechBubble key={dialogue} text={dialogue} />}
             </AnimatePresence>
             <svg width="64" height="80" viewBox="0 0 64 80" fill="none" className="drop-shadow-2xl">
                 {renderAvatarBody()}

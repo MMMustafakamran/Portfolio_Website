@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform, useVelocity, useMotionValueEvent } from 'framer-motion';
 import { Github, Linkedin, Mail, Terminal, Cpu, Globe, ExternalLink, Code2, ChevronDown, User, Layers, Briefcase, Clock, Send, BookOpen, Monitor } from 'lucide-react';
 import PixelAvatar from './components/PixelAvatar';
@@ -73,13 +73,20 @@ export default function PixelPilotPortfolio() {
     const progressBarHeight = useTransform(smoothProgress, (value) => `${value * 100}%`);
 
     const [avatarState, setAvatarState] = useState('waving');
-    const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
+    const [avatarDialogue, setAvatarDialogue] = useState("Hi! Welcome");
     const [landingProgress, setLandingProgress] = useState(0);
     const [isLandingLocked, setIsLandingLocked] = useState(true);
+    
+    // Use refs to track previous values and prevent unnecessary updates
+    const previousDialogueRef = useRef(avatarDialogue);
+    const previousStateRef = useRef(avatarState);
+    const lastUpdateTimeRef = useRef(0);
+    const hasSetWalkingDialogueRef = useRef(false);
 
-    // Avatar Position Logic
-    const avatarXLanding = `${50 - (landingProgress * 42)}%`; // 50% -> 8% (horizontal only)
-    const avatarYLanding = "50%"; // Stay at 50% - no diagonal!
+    // Avatar Position Logic for Landing
+    // Avatar starts inside the avatar frame (left column ~25%) and moves to left sidebar (8%) as user scrolls
+    const avatarXLanding = `${34 - (landingProgress * 17)}%`; // 25% (inside frame) -> 8% (sidebar)
+    const avatarYLanding = "50%"; // Stay at 50% vertically during landing transition
 
     const avatarX = useTransform(smoothProgress,
         [0, 0.25, 0.5, 0.75, 1],
@@ -94,25 +101,42 @@ export default function PixelPilotPortfolio() {
     const finalAvatarX = isLandingLocked ? avatarXLanding : avatarX;
     const finalAvatarY = isLandingLocked ? avatarYLanding : avatarY;
 
-    // Landing page scroll lock
+    // Landing page scroll lock - Avatar walks to sidebar on scroll
     useEffect(() => {
         const handleWheel = (e) => {
             if (isLandingLocked) {
                 e.preventDefault();
                 setLandingProgress(prev => {
-                    const delta = e.deltaY / 1000;
+                    const delta = e.deltaY / 800; // Slightly faster progression
                     const newProgress = Math.max(0, Math.min(1, prev + delta));
 
+                    // Change avatar to walking when user starts scrolling (progress > 0)
+                    if (newProgress > 0 && prev === 0) {
+                        setAvatarState('walking');
+                        if (!hasSetWalkingDialogueRef.current) {
+                            setAvatarDialogue("Let me show you around!");
+                            hasSetWalkingDialogueRef.current = true;
+                        }
+                    } else if (newProgress > 0 && newProgress < 1) {
+                        // Keep walking state during transition - don't update dialogue
+                        setAvatarState('walking');
+                    }
+
+                    // When avatar reaches sidebar (progress = 1), unlock scrolling
                     if (newProgress >= 1 && prev < 1) {
+                        // Small delay to ensure avatar reaches position
                         setTimeout(() => {
                             setIsLandingLocked(false);
+                            setAvatarState('idle');
+                            setAvatarDialogue("I build scalable backend systems.");
+                            hasSetWalkingDialogueRef.current = false; // Reset for next time
+                            // Smooth scroll to hero section
                             document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
-                        }, 100);
+                        }, 300);
                     }
 
                     return newProgress;
                 });
-                setAvatarState('walking');
             }
         };
 
@@ -124,22 +148,39 @@ export default function PixelPilotPortfolio() {
     useMotionValueEvent(scrollYProgress, "change", (progress) => {
         if (isLandingLocked) return;
 
+        // Debounce updates to prevent flickering (only update every 100ms)
+        const now = Date.now();
+        if (now - lastUpdateTimeRef.current < 100) return;
+        
+        let newState = avatarState;
+        let newDialogue = avatarDialogue;
+        
         // Update based on section - maintain animation throughout section
-        if (progress < 0.24) {
-            setAvatarState('idle');
-            setAvatarDialogue("I build scalable backend systems.");
-        } else if (progress < 0.49) {
-            setAvatarState('reading');
-            setAvatarDialogue("Here are the tools I use to build.");
-        } else if (progress < 0.74) {
-            setAvatarState('working');
-            setAvatarDialogue("Check out some of my recent projects.");
-        } else if (progress < 0.90) {
-            setAvatarState('reading');
-            setAvatarDialogue("My professional journey so far.");
+        // Using slightly different thresholds with buffer zones to prevent rapid switching
+        if (progress < 0.25) {
+            newState = 'idle';
+            newDialogue = "I build scalable backend systems.";
+        } else if (progress < 0.50) {
+            newState = 'reading';
+            newDialogue = "Here are the tools I use to build.";
+        } else if (progress < 0.75) {
+            newState = 'working';
+            newDialogue = "Check out some of my recent projects.";
+        } else if (progress < 0.92) {
+            newState = 'reading';
+            newDialogue = "My professional journey so far.";
         } else {
-            setAvatarState('contact');
-            setAvatarDialogue("Let's build something together!");
+            newState = 'contact';
+            newDialogue = "Let's build something together!";
+        }
+        
+        // Only update if state or dialogue actually changed
+        if (newState !== previousStateRef.current || newDialogue !== previousDialogueRef.current) {
+            previousStateRef.current = newState;
+            previousDialogueRef.current = newDialogue;
+            lastUpdateTimeRef.current = now;
+            setAvatarState(newState);
+            setAvatarDialogue(newDialogue);
         }
     });
 
@@ -163,8 +204,11 @@ export default function PixelPilotPortfolio() {
                 }}
                 className="fixed z-50 pointer-events-none hidden md:block"
             >
-                <div className="transform scale-150">
-                    <PixelAvatar state={avatarState} dialogue={avatarDialogue} />
+                <div className={`transform ${isLandingLocked ? 'scale-[2.5]' : 'scale-150'}`}>
+                    <PixelAvatar 
+                        state={avatarState} 
+                        dialogue={isLandingLocked && landingProgress === 0 && avatarState === 'waving' ? "Hi! Welcome" : avatarDialogue} 
+                    />
                 </div>
             </motion.div>
 
@@ -213,23 +257,213 @@ export default function PixelPilotPortfolio() {
                 </nav>
 
                 {/* LANDING SECTION */}
-                <section id="landing" className="h-screen flex flex-col items-center justify-center relative" aria-label="Landing section">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950 opacity-50" aria-hidden="true"></div>
-                    <div className="z-10 text-center space-y-6">
-                        <p className="text-slate-400 text-xl max-w-md mx-auto">
-                            Welcome to my portfolio
-                        </p>
-                        {/* Scroll indicator at bottom */}
-                        <motion.div
-                            animate={{ y: [0, 10, 0] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 flex flex-col items-center gap-2"
-                            aria-hidden="true"
-                        >
-                            <span className="text-xs font-mono">Scroll Down</span>
-                            <ChevronDown aria-hidden="true" />
-                        </motion.div>
+                <section id="landing" className="h-screen flex items-center justify-center relative overflow-hidden" aria-label="Landing section">
+                    {/* Pixel Art Background Grid */}
+                    <div className="absolute inset-0 opacity-10" aria-hidden="true">
+                        <div className="absolute inset-0" style={{
+                            backgroundImage: `
+                                linear-gradient(rgba(6, 182, 212, 0.15) 2px, transparent 2px),
+                                linear-gradient(90deg, rgba(6, 182, 212, 0.15) 2px, transparent 2px)
+                            `,
+                            backgroundSize: '32px 32px',
+                            animation: 'gridMove 20s linear infinite'
+                        }}></div>
                     </div>
+
+                    {/* Pixel Art Border Decoration */}
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" style={{
+                        backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(6, 182, 212, 0.3) 8px, rgba(6, 182, 212, 0.3) 16px)'
+                    }} aria-hidden="true"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" style={{
+                        backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(6, 182, 212, 0.3) 8px, rgba(6, 182, 212, 0.3) 16px)'
+                    }} aria-hidden="true"></div>
+
+                    {/* Gradient Orbs - Subtle */}
+                    <motion.div
+                        className="absolute top-1/4 right-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+                        animate={{
+                            x: [0, 50, 0],
+                            y: [0, 30, 0],
+                            scale: [1, 1.1, 1],
+                        }}
+                        transition={{
+                            duration: 8,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        aria-hidden="true"
+                    />
+
+                    {/* Main Content - Split Layout */}
+                    <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
+                        <div className="grid md:grid-cols-2 gap-12 items-center">
+                            {/* Left Side - Avatar Placeholder/Frame (fades out as avatar moves) */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -50 }}
+                                animate={{ 
+                                    opacity: isLandingLocked && landingProgress < 0.3 ? 1 : 0,
+                                    x: 0 
+                                }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                                className="hidden md:flex flex-col items-center justify-center relative"
+                            >
+                                {/* Pixel Art Frame - Shows initially, fades as avatar walks */}
+                                <div className="relative">
+                                    {/* Pixel border effect */}
+                                    <div className="absolute -inset-4 border-4 border-cyan-500/30" style={{
+                                        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                                        boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1)'
+                                    }}></div>
+                                    <div className="relative bg-slate-900/50 backdrop-blur-sm p-8 border-4 border-cyan-500/50">
+                                        {/* Pixel dots decoration */}
+                                        <div className="absolute -top-2 -left-2 w-4 h-4 bg-cyan-400"></div>
+                                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-cyan-400"></div>
+                                        <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-cyan-400"></div>
+                                        <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-cyan-400"></div>
+                                        
+                                        {/* Placeholder - invisible avatar for spacing */}
+                                        <div className="transform scale-[2.5] opacity-0">
+                                            <PixelAvatar state="waving" dialogue={undefined} />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Scroll Indicator Below Avatar Frame */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ 
+                                        opacity: isLandingLocked && landingProgress < 0.3 ? 1 : 0,
+                                        y: 0 
+                                    }}
+                                    transition={{ duration: 0.6, delay: 1.2 }}
+                                    className="mt-8 flex flex-col items-center gap-3"
+                                >
+                                    <motion.button
+                                        animate={{ y: [0, 8, 0] }}
+                                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                                        onClick={() => scrollToSection('hero')}
+                                        className="flex flex-col items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer group"
+                                        aria-label="Scroll to next section"
+                                    >
+                                        <span className="text-sm font-mono tracking-widest uppercase font-bold">SCROLL</span>
+                                        <motion.div
+                                            animate={{ y: [0, 4, 0] }}
+                                            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                                        >
+                                            <ChevronDown size={24} className="group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" aria-hidden="true" />
+                                        </motion.div>
+                                        <div className="w-1 h-10 bg-gradient-to-b from-cyan-500 to-transparent"></div>
+                                    </motion.button>
+                                </motion.div>
+                            </motion.div>
+
+                            {/* Right Side - Text Content */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 50 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                                className="text-center md:text-left space-y-6"
+                            >
+                                {/* Pixel Art Badge */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, delay: 0.6 }}
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border-2 border-cyan-500/50 backdrop-blur-sm"
+                                    style={{
+                                        boxShadow: 'inset 0 0 10px rgba(6, 182, 212, 0.2), 0 0 20px rgba(6, 182, 212, 0.1)'
+                                    }}
+                                >
+                                    <div className="w-3 h-3 bg-cyan-400" style={{ imageRendering: 'pixelated' }}></div>
+                                    <span className="text-cyan-400 text-sm font-mono tracking-wider">AVAILABLE FOR OPPORTUNITIES</span>
+                                </motion.div>
+
+                                {/* Main Heading with Pixel Art Style */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.8, delay: 0.8 }}
+                                    className="space-y-4"
+                                >
+                                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
+                                        <span className="block text-slate-100 mb-2">Hi, I'm</span>
+                                        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 animate-gradient">
+                                            Mustafa Kamran
+                                        </span>
+                                    </h1>
+                                    <div className="flex items-center gap-3 justify-center md:justify-start">
+                                        <div className="h-1 w-12 bg-cyan-500"></div>
+                                        <h2 className="text-2xl md:text-3xl text-cyan-300 font-mono">Software Engineer</h2>
+                                        <div className="h-1 w-12 bg-cyan-500"></div>
+                                    </div>
+                                </motion.div>
+
+                                {/* Description */}
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.8, delay: 1 }}
+                                    className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl mx-auto md:mx-0"
+                                >
+                                    Final-year CS student building scalable backend systems with AI. 
+                                    <span className="text-cyan-400 font-semibold"> Crafting automation workflows</span> that save hours for real teams.
+                                </motion.p>
+
+                                {/* CTA Buttons with Pixel Art Style */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, delay: 1.2 }}
+                                    className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4"
+                                >
+                                    <motion.button
+                                        whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(6, 182, 212, 0.5)' }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => scrollToSection('hero')}
+                                        className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 font-bold border-2 border-cyan-400 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all flex items-center gap-2"
+                                        style={{ imageRendering: 'pixelated' }}
+                                        aria-label="Explore portfolio"
+                                    >
+                                        <span>EXPLORE</span>
+                                        <ChevronDown size={18} aria-hidden="true" />
+                                    </motion.button>
+                                    <motion.a
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        href="mailto:mmustafakamran@gmail.com"
+                                        className="px-8 py-4 border-2 border-cyan-500/50 text-cyan-400 font-bold hover:bg-cyan-500/10 transition-all flex items-center gap-2 backdrop-blur-sm"
+                                        style={{ imageRendering: 'pixelated' }}
+                                        aria-label="Send email"
+                                    >
+                                        <Mail size={18} aria-hidden="true" />
+                                        <span>GET IN TOUCH</span>
+                                    </motion.a>
+                                </motion.div>
+
+                                {/* Tech Stack with Pixel Style */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.8, delay: 1.4 }}
+                                    className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-6"
+                                >
+                                    {['React', 'TypeScript', 'Python', 'AI/LLMs'].map((tech, i) => (
+                                        <motion.span
+                                            key={tech}
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: 1.6 + i * 0.1 }}
+                                            className="px-3 py-1.5 bg-slate-900/70 border-2 border-slate-700 text-xs font-mono text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
+                                            style={{ imageRendering: 'pixelated' }}
+                                        >
+                                            {tech}
+                                        </motion.span>
+                                    ))}
+                                </motion.div>
+                            </motion.div>
+                        </div>
+                    </div>
+
                 </section>
 
                 {/* SECTION 1: HERO */}
