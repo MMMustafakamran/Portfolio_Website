@@ -31,54 +31,74 @@ export default function PixelPilotPortfolio() {
         restDelta: 0.001
     });
 
-    const [avatarState, setAvatarState] = useState('idle');
-    const [avatarDialogue, setAvatarDialogue] = useState('');
+    const [avatarState, setAvatarState] = useState('waving');
+    const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
+    const [landingProgress, setLandingProgress] = useState(0);
+    const [isLandingLocked, setIsLandingLocked] = useState(true);
 
     // Avatar Position Logic
-    // We'll use fixed positioning relative to the viewport, but controlled by scroll progress
-    // to simulate "walking" through the page.
+    const avatarXLanding = `${50 - (landingProgress * 42)}%`; // 50% -> 8% (horizontal only)
+    const avatarYLanding = "50%"; // Stay at 50% - no diagonal!
 
-    // X Position: Moves from center (Hero) to side (Stack) and stays there
     const avatarX = useTransform(smoothProgress,
-        [0, 0.1, 0.2, 0.8, 1],
-        ["50%", "50%", "10%", "10%", "50%"] // Center -> Center -> Left -> Left -> Center
+        [0, 0.25, 0.5, 0.75, 1],
+        ["8%", "8%", "8%", "8%", "8%"]
     );
 
-    // Y Position: Moves down slightly as we scroll
     const avatarY = useTransform(smoothProgress,
-        [0, 0.2, 0.8, 1],
-        ["20%", "50%", "50%", "80%"]
+        [0, 0.25, 0.5, 0.75, 1],
+        ["15%", "35%", "55%", "75%", "92%"]
     );
 
-    // Logic to determine Avatar State and Dialogue
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const velocity = scrollVelocity.get();
-        const progress = scrollYProgress.get();
+    const finalAvatarX = isLandingLocked ? avatarXLanding : avatarX;
+    const finalAvatarY = isLandingLocked ? avatarYLanding : avatarY;
 
-        // 1. Sliding/Walking State
-        if (Math.abs(velocity) > 5) {
-            setAvatarState('walking');
-            setAvatarDialogue(''); // Silence while moving
+    // Landing page scroll lock
+    useEffect(() => {
+        const handleWheel = (e) => {
+            if (isLandingLocked) {
+                e.preventDefault();
+                setLandingProgress(prev => {
+                    const delta = e.deltaY / 1000;
+                    const newProgress = Math.max(0, Math.min(1, prev + delta));
+
+                    if (newProgress >= 1 && prev < 1) {
+                        setTimeout(() => {
+                            setIsLandingLocked(false);
+                            document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                    }
+
+                    return newProgress;
+                });
+                setAvatarState('walking');
+            }
+        };
+
+        window.addEventListener('wheel', handleWheel, { passive: false });
+        return () => window.removeEventListener('wheel', handleWheel);
+    }, [isLandingLocked]);
+
+    // Logic to determine Avatar State and Dialogue - NO WALKING, keep section animations
+    useMotionValueEvent(scrollYProgress, "change", (progress) => {
+        if (isLandingLocked) return;
+
+        // Update based on section - maintain animation throughout section
+        if (progress < 0.24) {
+            setAvatarState('idle');
+            setAvatarDialogue("I build scalable backend systems.");
+        } else if (progress < 0.49) {
+            setAvatarState('reading');
+            setAvatarDialogue("Here are the tools I use to build.");
+        } else if (progress < 0.74) {
+            setAvatarState('working');
+            setAvatarDialogue("Check out some of my recent projects.");
+        } else if (progress < 0.90) {
+            setAvatarState('reading');
+            setAvatarDialogue("My professional journey so far.");
         } else {
-            const timer = setTimeout(() => {
-                if (progress < 0.1) {
-                    setAvatarState('idle');
-                    setAvatarDialogue("Hi! I'm Mustafa, welcome to my portfolio.");
-                } else if (progress < 0.3) {
-                    setAvatarState('reading');
-                    setAvatarDialogue("Here are the tools I use to build.");
-                } else if (progress < 0.6) {
-                    setAvatarState('working');
-                    setAvatarDialogue("Check out some of my recent projects.");
-                } else if (progress < 0.85) {
-                    setAvatarState('reading');
-                    setAvatarDialogue("My professional journey so far.");
-                } else {
-                    setAvatarState('contact');
-                    setAvatarDialogue("Let's build something together!");
-                }
-            }, 200);
-            return () => clearTimeout(timer);
+            setAvatarState('contact');
+            setAvatarDialogue("Let's build something together!");
         }
     });
 
@@ -95,12 +115,12 @@ export default function PixelPilotPortfolio() {
             {/* --- AVATAR OVERLAY --- */}
             <motion.div
                 style={{
-                    left: avatarX,
-                    top: avatarY,
-                    x: "-50%", // Center the avatar on its coordinate
+                    left: finalAvatarX,
+                    top: finalAvatarY,
+                    x: "-50%",
                     y: "-50%"
                 }}
-                className="fixed z-50 pointer-events-none hidden md:block transition-all duration-500 ease-out"
+                className="fixed z-50 pointer-events-none hidden md:block"
             >
                 <div className="transform scale-150">
                     <PixelAvatar state={avatarState} dialogue={avatarDialogue} />
@@ -108,7 +128,7 @@ export default function PixelPilotPortfolio() {
             </motion.div>
 
             {/* --- MINIMAL SIDEBAR (Navigation Rail) --- */}
-            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-40">
+            <div className="hidden lg:block fixed left-0 top-0 h-full w-24 border-r border-slate-800 bg-slate-950/80 backdrop-blur-sm z-40" style={{ opacity: isLandingLocked ? 0 : 1, transition: 'opacity 0.5s' }}>
 
                 <div className="relative h-full w-full flex justify-center">
 
@@ -123,11 +143,11 @@ export default function PixelPilotPortfolio() {
 
                     {/* CHECKPOINTS (Interactive Navigation) */}
                     {[
-                        { top: '5%', icon: User, label: "Start", id: "hero" },
-                        { top: '25%', icon: Layers, label: "Stack", id: "stack" },
-                        { top: '50%', icon: Briefcase, label: "Work", id: "projects" },
-                        { top: '80%', icon: Clock, label: "Hist", id: "experience" },
-                        { top: '95%', icon: Send, label: "End", id: "contact" }
+                        { top: '15%', progress: 0.12, icon: User, label: "Start", id: "hero" },
+                        { top: '35%', progress: 0.37, icon: Layers, label: "Stack", id: "stack" },
+                        { top: '55%', progress: 0.62, icon: Briefcase, label: "Work", id: "projects" },
+                        { top: '75%', progress: 0.82, icon: Clock, label: "Hist", id: "experience" },
+                        { top: '92%', progress: 0.96, icon: Send, label: "End", id: "contact" }
                     ].map((point, i) => (
                         <button
                             key={i}
@@ -138,8 +158,8 @@ export default function PixelPilotPortfolio() {
                             {/* The Dot on the road */}
                             <motion.div
                                 style={{
-                                    backgroundColor: useTransform(smoothProgress, [parseFloat(point.top) / 100 - 0.05, parseFloat(point.top) / 100], ["#1e293b", "#06b6d4"]),
-                                    borderColor: useTransform(smoothProgress, [parseFloat(point.top) / 100 - 0.05, parseFloat(point.top) / 100], ["#475569", "#22d3ee"])
+                                    backgroundColor: useTransform(smoothProgress, [point.progress - 0.03, point.progress], ["#1e293b", "#06b6d4"]),
+                                    borderColor: useTransform(smoothProgress, [point.progress - 0.03, point.progress], ["#475569", "#22d3ee"])
                                 }}
                                 className="w-3 h-3 rounded-full border-2 -ml-[6px] group-hover:scale-150 transition-transform cursor-pointer shadow-lg z-20 bg-slate-900"
                             />
@@ -165,6 +185,25 @@ export default function PixelPilotPortfolio() {
                         <a href="#contact" className="text-sm hover:text-cyan-400">Contact</a>
                     </div>
                 </nav>
+
+                {/* LANDING SECTION */}
+                <section id="landing" className="h-screen flex flex-col items-center justify-center relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950 opacity-50"></div>
+                    <div className="z-10 text-center space-y-6">
+                        <p className="text-slate-400 text-xl max-w-md mx-auto">
+                            Welcome to my portfolio
+                        </p>
+                        {/* Scroll indicator at bottom */}
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                            className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 flex flex-col items-center gap-2"
+                        >
+                            <span className="text-xs font-mono">Scroll Down</span>
+                            <ChevronDown />
+                        </motion.div>
+                    </div>
+                </section>
 
                 {/* SECTION 1: HERO */}
                 <SectionWrapper id="hero" className="px-6 md:px-20 py-20 border-b border-slate-900/50">
