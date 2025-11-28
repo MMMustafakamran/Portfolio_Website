@@ -86,10 +86,10 @@ export default function PixelPilotPortfolio() {
     const progressBarHeight = useTransform(smoothProgress, (value) => `${value * 100}%`);
 
     const [avatarState, setAvatarState] = useState('waving');
-    const [avatarDialogue, setAvatarDialogue] = useState("Hi! Welcome");
+    const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
     const [landingProgress, setLandingProgress] = useState(0);
     const [isLandingLocked, setIsLandingLocked] = useState(true);
-    
+
     // Use refs to track previous values and prevent unnecessary updates
     const previousDialogueRef = useRef(avatarDialogue);
     const previousStateRef = useRef(avatarState);
@@ -99,7 +99,7 @@ export default function PixelPilotPortfolio() {
     // Avatar Position Logic for Landing
     // Avatar starts inside the avatar frame (left column ~34%) and moves to left sidebar (8%) and first checkpoint (15%) as user scrolls
     const avatarXLanding = `${34 - (landingProgress * 26)}%`; // 34% (inside frame) -> 8% (sidebar)
-    const avatarYLanding = `${50 - (landingProgress * 35)}%`; // 50% (center) -> 15% (first checkpoint - hero)
+    const avatarYLanding = `${35 - (landingProgress * 20)}%`; // 35% (inside frame) -> 15% (first checkpoint - hero)
 
     const avatarX = useTransform(smoothProgress,
         [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
@@ -461,7 +461,7 @@ export default function PixelPilotPortfolio() {
                                 </motion.div>
 
                                 {/* Tech Stack with Pixel Style */}
-                                <motion.div
+                        <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     transition={{ duration: 0.8, delay: 1.4 }}
@@ -480,8 +480,8 @@ export default function PixelPilotPortfolio() {
                                         </motion.span>
                                     ))}
                                 </motion.div>
-                            </motion.div>
-                        </div>
+                        </motion.div>
+                    </div>
                     </div>
 
                 </section>

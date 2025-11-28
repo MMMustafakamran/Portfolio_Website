@@ -141,10 +141,10 @@ const PixelAvatar = ({ state, dialogue }) => {
 
     const SpeechBubble = ({ text }) => (
         <div
-            className="absolute left-full ml-1 bg-white text-slate-900 px-3 py-2 rounded-2xl shadow-2xl border-2 border-slate-900 text-center z-50 pointer-events-none whitespace-nowrap"
-            style={{ top: '20px', transform: 'translateX(-16px)' }}
+            className="absolute left-full ml-1 bg-white text-slate-900 px-3 py-3 rounded-2xl shadow-2xl border-2 border-slate-900 text-center z-50 pointer-events-none"
+            style={{ top: '20px', transform: 'translateX(-16px)', minHeight: '40px', maxWidth: '200px' }}
         >
-            <p className="font-mono text-[10px] font-bold leading-tight">{text}</p>
+            <p className="font-mono text-[10px] font-bold leading-relaxed whitespace-normal">{text}</p>
             {/* Speech bubble tail pointing to avatar - longer */}
             <div 
                 className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
