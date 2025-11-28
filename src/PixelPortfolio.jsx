@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useSpring, useTransform, useVelocity, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { Github, Linkedin, Mail, Terminal, Cpu, Globe, ExternalLink, Code2, ChevronDown, User, Layers, Briefcase, Clock, Send, BookOpen, Monitor } from 'lucide-react';
 import PixelAvatar from './components/PixelAvatar';
 
@@ -73,17 +73,17 @@ const NavigationPoint = ({ point, smoothProgress, scrollToSection }) => {
 // --- MAIN COMPONENT ---
 
 export default function PixelPilotPortfolio() {
-    const { scrollY, scrollYProgress } = useScroll();
-    const scrollVelocity = useVelocity(scrollY);
+    const { scrollYProgress } = useScroll();
+    const unifiedProgress = useMotionValue(0);
 
-    const smoothProgress = useSpring(scrollYProgress, {
+    const smoothProgress = useSpring(unifiedProgress, {
         stiffness: 100,
         damping: 30,
         restDelta: 0.001
     });
 
     // Transform smoothProgress to height percentage for progress bar
-    const progressBarHeight = useTransform(smoothProgress, (value) => `${value * 100}%`);
+    const progressBarHeight = useTransform(unifiedProgress, (value) => `${value * 100}%`);
 
     const [avatarState, setAvatarState] = useState('waving');
     const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
@@ -101,14 +101,14 @@ export default function PixelPilotPortfolio() {
     const avatarXLanding = `${53 - (landingProgress * 45)}%`; // Horizontal slide from frame -> sidebar
     const avatarYLanding = landingProgress < 1 ? "39%" : "15%"; // Teleport vertically only after reaching sidebar
 
-    const avatarX = useTransform(smoothProgress,
+    const avatarX = useTransform(unifiedProgress,
         [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
         ["8%", "8%", "8%", "8%", "8%", "8%", "8%"]
     );
 
-    const avatarY = useTransform(smoothProgress,
+    const avatarY = useTransform(unifiedProgress,
         [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
-        ["15%", "15%", "35%", "55%", "75%", "92%", "92%"]
+        ["8%", "15%", "35%", "55%", "75%", "92%", "92%"]
     );
 
     const finalAvatarX = isLandingLocked ? avatarXLanding : avatarX;
@@ -122,6 +122,7 @@ export default function PixelPilotPortfolio() {
                 setLandingProgress(prev => {
                     const delta = e.deltaY / 800; // Slightly faster progression
                     const newProgress = Math.max(0, Math.min(1, prev + delta));
+                    unifiedProgress.set(newProgress);
 
                     // Change avatar to walking when user starts scrolling (progress > 0)
                     if (newProgress > 0 && prev === 0) {
@@ -163,7 +164,19 @@ export default function PixelPilotPortfolio() {
 
         window.addEventListener('wheel', handleWheel, { passive: false });
         return () => window.removeEventListener('wheel', handleWheel, { passive: false });
-    }, [isLandingLocked]);
+    }, [isLandingLocked, unifiedProgress]);
+
+    useMotionValueEvent(scrollYProgress, "change", (value) => {
+        if (!isLandingLocked) {
+            unifiedProgress.set(value);
+        }
+    });
+
+    useEffect(() => {
+        if (!isLandingLocked) {
+            unifiedProgress.set(scrollYProgress.get());
+        }
+    }, [isLandingLocked, scrollYProgress, unifiedProgress]);
 
     // Logic to determine Avatar State and Dialogue - NO WALKING, keep section animations
     useMotionValueEvent(scrollYProgress, "change", (progress) => {
@@ -226,7 +239,7 @@ export default function PixelPilotPortfolio() {
                     left: finalAvatarX,
                     top: finalAvatarY,
                     x: "-50%",
-                    y: "-50%"
+                    y: "-10%"
                 }}
                 className="fixed z-50 pointer-events-none hidden md:block"
             >
