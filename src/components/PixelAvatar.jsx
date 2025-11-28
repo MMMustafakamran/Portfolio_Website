@@ -140,23 +140,31 @@ const PixelAvatar = ({ state, dialogue }) => {
     );
 
     const SpeechBubble = ({ text }) => (
-        <div
-            className="absolute left-full ml-1 bg-white text-slate-900 px-3 py-3 rounded-2xl shadow-2xl border-2 border-slate-900 text-center z-50 pointer-events-none"
-            style={{ top: '20px', transform: 'translateX(-16px)', minHeight: '40px', maxWidth: '200px' }}
-        >
-            <p className="font-mono text-[10px] font-bold leading-relaxed whitespace-normal">{text}</p>
-            {/* Speech bubble tail pointing to avatar - longer */}
-            <div 
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
-                style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '8px solid transparent',
-                    borderBottom: '8px solid transparent',
-                    borderRight: '12px solid white',
-                    filter: 'drop-shadow(2px 0 0px rgba(15, 23, 42, 1))'
-                }}
-            ></div>
+        <div className="absolute top-2 left-[80%] min-w-[80px] max-w-[90px]">
+            <div className="relative bg-slate-900/90 text-slate-100 px-3 py-2.5 rounded-xl border border-cyan-500/60 shadow-[0_6px_20px_rgba(0,0,0,0.35)] font-mono text-[9px] leading-snug">
+                {text}
+                {/* Tail pointing from avatar to bubble (attached) */}
+                <div
+                    className="absolute top-1/2 -translate-y-1/2 -left-3"
+                    style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '6px solid transparent',
+                        borderBottom: '6px solid transparent',
+                        borderRight: '6px solid rgba(15,23,42,0.95)'
+                    }}
+                ></div>
+                <div
+                    className="absolute top-1/2 -translate-y-1/2 -left-[0.55rem]"
+                    style={{
+                        width: 0,
+                        height: 0,
+                        borderTop: '5px solid transparent',
+                        borderBottom: '5px solid transparent',
+                        borderRight: '5px solid rgba(51,65,85,0.95)'
+                    }}
+                ></div>
+            </div>
         </div>
     );
 
