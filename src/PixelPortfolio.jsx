@@ -74,7 +74,7 @@ const NavigationPoint = React.memo(NavigationPointComponent);
 NavigationPoint.displayName = 'NavigationPoint';
 
 const NAVIGATION_POINTS = [
-    { top: '15%', progress: 0.12, icon: User, label: "Start", id: "hero" },
+    { top: '15%', progress: 0.12, icon: User, label: "About Me", id: "hero" },
     { top: '35%', progress: 0.37, icon: Layers, label: "Stack", id: "stack" },
     { top: '55%', progress: 0.62, icon: Briefcase, label: "Work", id: "projects" },
     { top: '75%', progress: 0.82, icon: Clock, label: "Hist", id: "experience" },
@@ -129,9 +129,8 @@ export default function PixelPilotPortfolio() {
     useEffect(() => {
         const handleWheel = (e) => {
             if (isLandingLocked) {
-                e.preventDefault();
                 setLandingProgress(prev => {
-                    const delta = e.deltaY / 800; // Slightly faster progression
+                    const delta = e.deltaY / 400; // Faster progression - avatar reaches sidebar quicker
                     const newProgress = Math.max(0, Math.min(1, prev + delta));
                     unifiedProgress.set(newProgress);
 
@@ -151,7 +150,7 @@ export default function PixelPilotPortfolio() {
                     if (newProgress >= 1 && prev < 1) {
                         // Small delay to ensure avatar reaches position
                         setTimeout(() => {
-                            const backendDialogue = "I build scalable backend systems.";
+                            const backendDialogue = ""; // No dialogue on the first (About Me) section
                             // Update refs FIRST to prevent flickering when scroll handler starts
                             previousDialogueRef.current = backendDialogue;
                             previousStateRef.current = 'idle';
@@ -211,9 +210,9 @@ export default function PixelPilotPortfolio() {
         
         // Update based on section - match checkpoint progress values
         // Using checkpoint progress values for consistency
-        if (progress < 0.12) {
+        if (progress < 0.2) {
             newState = 'idle';
-            newDialogue = "I build scalable backend systems.";
+            newDialogue = ""; // No dialogue in About Me section
         } else if (progress < 0.37) {
             newState = 'pointing';
             newDialogue = "Here are the tools I use to build.";
@@ -352,35 +351,6 @@ export default function PixelPilotPortfolio() {
                     {/* Main Content - Split Layout */}
                     <div className="relative z-20 w-full max-w-3xl mx-auto px-6 md:px-12 lg:px-20">
                         <div className="flex flex-col items-center justify-center text-center space-y-8">
-                            {/* Centered Avatar Frame */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8 }}
-                                className="flex flex-col items-center justify-center relative"
-                            >
-                                <div className="relative">
-                                    <div
-                                        className="absolute -inset-4 border-4 border-cyan-500/30"
-                                        style={{
-                                            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                                            boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1)'
-                                        }}
-                                    ></div>
-                                    <div className="relative bg-slate-900/50 backdrop-blur-sm p-8 border-4 border-cyan-500/50">
-                                        <div className="absolute -top-2 -left-2 w-4 h-4 bg-cyan-400"></div>
-                                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-cyan-400"></div>
-                                        <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-cyan-400"></div>
-                                        <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-cyan-400"></div>
-                                        
-                                        {/* Placeholder - invisible avatar for spacing */}
-                                        <div className="transform scale-[2.5] opacity-0">
-                                            <PixelAvatar state="waving" dialogue={undefined} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-
                             {/* Scroll Prompt */}
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
