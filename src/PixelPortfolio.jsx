@@ -28,14 +28,14 @@ const SectionWrapper = ({ children, id, className }) => {
 };
 
 // --- NAVIGATION POINT COMPONENT ---
-const NavigationPoint = ({ point, smoothProgress, scrollToSection }) => {
+const NavigationPointComponent = ({ point, sidebarProgress, scrollToSection }) => {
     const backgroundColor = useTransform(
-        smoothProgress,
+        sidebarProgress,
         [point.progress - 0.03, point.progress],
         ["#1e293b", "#06b6d4"]
     );
     const borderColor = useTransform(
-        smoothProgress,
+        sidebarProgress,
         [point.progress - 0.03, point.progress],
         ["#475569", "#22d3ee"]
     );
@@ -70,11 +70,28 @@ const NavigationPoint = ({ point, smoothProgress, scrollToSection }) => {
     );
 };
 
+const NavigationPoint = React.memo(NavigationPointComponent);
+NavigationPoint.displayName = 'NavigationPoint';
+
+const NAVIGATION_POINTS = [
+    { top: '15%', progress: 0.12, icon: User, label: "Start", id: "hero" },
+    { top: '35%', progress: 0.37, icon: Layers, label: "Stack", id: "stack" },
+    { top: '55%', progress: 0.62, icon: Briefcase, label: "Work", id: "projects" },
+    { top: '75%', progress: 0.82, icon: Clock, label: "Hist", id: "experience" },
+    { top: '92%', progress: 0.96, icon: Send, label: "End", id: "contact" }
+];
+
 // --- MAIN COMPONENT ---
 
 export default function PixelPilotPortfolio() {
     const { scrollYProgress } = useScroll();
     const unifiedProgress = useMotionValue(0);
+    const sidebarProgress = useMotionValue(0);
+
+    const [avatarState, setAvatarState] = useState('waving');
+    const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
+    const [landingProgress, setLandingProgress] = useState(0);
+    const [isLandingLocked, setIsLandingLocked] = useState(true);
 
     const smoothProgress = useSpring(unifiedProgress, {
         stiffness: 100,
@@ -82,13 +99,7 @@ export default function PixelPilotPortfolio() {
         restDelta: 0.001
     });
 
-    // Transform smoothProgress to height percentage for progress bar
-    const progressBarHeight = useTransform(unifiedProgress, (value) => `${value * 100}%`);
-
-    const [avatarState, setAvatarState] = useState('waving');
-    const [avatarDialogue, setAvatarDialogue] = useState("Hi! I'm Mustafa, welcome to my portfolio.");
-    const [landingProgress, setLandingProgress] = useState(0);
-    const [isLandingLocked, setIsLandingLocked] = useState(true);
+    const progressBarHeight = useTransform(sidebarProgress, (value) => `${value * 100}%`);
 
     // Use refs to track previous values and prevent unnecessary updates
     const previousDialogueRef = useRef(avatarDialogue);
@@ -172,11 +183,20 @@ export default function PixelPilotPortfolio() {
         }
     });
 
+    useMotionValueEvent(unifiedProgress, "change", (value) => {
+        if (!isLandingLocked) {
+            sidebarProgress.set(value);
+        }
+    });
+
     useEffect(() => {
         if (!isLandingLocked) {
             unifiedProgress.set(scrollYProgress.get());
+            sidebarProgress.set(unifiedProgress.get());
+        } else {
+            sidebarProgress.set(0);
         }
-    }, [isLandingLocked, scrollYProgress, unifiedProgress]);
+    }, [isLandingLocked, scrollYProgress, unifiedProgress, sidebarProgress]);
 
     // Logic to determine Avatar State and Dialogue - NO WALKING, keep section animations
     useMotionValueEvent(scrollYProgress, "change", (progress) => {
@@ -195,19 +215,19 @@ export default function PixelPilotPortfolio() {
             newState = 'idle';
             newDialogue = "I build scalable backend systems.";
         } else if (progress < 0.37) {
-            newState = 'reading';
+            newState = 'pointing';
             newDialogue = "Here are the tools I use to build.";
         } else if (progress < 0.62) {
             newState = 'working';
             newDialogue = "Check out some of my recent projects.";
         } else if (progress < 0.82) {
-            newState = 'reading';
+            newState = 'idle';
             newDialogue = "My professional journey so far.";
         } else if (progress < 0.96) {
-            newState = 'reading';
+            newState = 'pointing';
             newDialogue = "My professional journey so far.";
         } else {
-            newState = 'contact';
+            newState = 'waving';
             newDialogue = "Let's build something together!";
         }
         
@@ -259,24 +279,18 @@ export default function PixelPilotPortfolio() {
                     {/* THE MAIN ROAD (Minimal Line) */}
                     <div className="absolute h-full w-[2px] bg-slate-800 flex justify-center">
                         {/* The Lit Path (Progress Bar) */}
-                        <motion.div
-                            style={{ height: progressBarHeight }}
+                            <motion.div
+                                style={{ height: progressBarHeight }}
                             className="w-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.8)] absolute top-0"
                         />
                     </div>
 
                     {/* CHECKPOINTS (Interactive Navigation) */}
-                    {[
-                        { top: '15%', progress: 0.12, icon: User, label: "Start", id: "hero" },
-                        { top: '35%', progress: 0.37, icon: Layers, label: "Stack", id: "stack" },
-                        { top: '55%', progress: 0.62, icon: Briefcase, label: "Work", id: "projects" },
-                        { top: '75%', progress: 0.82, icon: Clock, label: "Hist", id: "experience" },
-                        { top: '92%', progress: 0.96, icon: Send, label: "End", id: "contact" }
-                    ].map((point, i) => (
+                    {NAVIGATION_POINTS.map((point) => (
                         <NavigationPoint
-                            key={i}
+                            key={point.id}
                             point={point}
-                            smoothProgress={smoothProgress}
+                            sidebarProgress={sidebarProgress}
                             scrollToSection={scrollToSection}
                         />
                     ))}
@@ -316,6 +330,8 @@ export default function PixelPilotPortfolio() {
                     <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" style={{
                         backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(6, 182, 212, 0.3) 8px, rgba(6, 182, 212, 0.3) 16px)'
                     }} aria-hidden="true"></div>
+
+                    {/* Escape Path */}
 
                     {/* Gradient Orbs - Subtle */}
                     <motion.div
