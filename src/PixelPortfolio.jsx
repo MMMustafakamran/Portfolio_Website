@@ -97,9 +97,9 @@ export default function PixelPilotPortfolio() {
     const hasSetWalkingDialogueRef = useRef(false);
 
     // Avatar Position Logic for Landing
-    // Avatar starts inside the avatar frame (left column ~34%) and moves to left sidebar (8%) and first checkpoint (15%) as user scrolls
-    const avatarXLanding = `${34 - (landingProgress * 26)}%`; // 34% (inside frame) -> 8% (sidebar)
-    const avatarYLanding = `${35 - (landingProgress * 20)}%`; // 35% (inside frame) -> 15% (first checkpoint - hero)
+    // Avatar starts inside the avatar frame and slides horizontally into the sidebar before snapping vertically to the first checkpoint
+    const avatarXLanding = `${53 - (landingProgress * 45)}%`; // Horizontal slide from frame -> sidebar
+    const avatarYLanding = landingProgress < 1 ? "39%" : "15%"; // Teleport vertically only after reaching sidebar
 
     const avatarX = useTransform(smoothProgress,
         [0, 0.12, 0.37, 0.62, 0.82, 0.96, 1],
@@ -233,7 +233,7 @@ export default function PixelPilotPortfolio() {
                 <div className={`transform ${isLandingLocked ? 'scale-[2.5]' : 'scale-150'}`}>
                     <PixelAvatar 
                         state={avatarState} 
-                        dialogue={isLandingLocked && landingProgress === 0 && avatarState === 'waving' ? "Hi! Welcome" : avatarDialogue} 
+                        dialogue={isLandingLocked && landingProgress === 0 && avatarState === 'waving' ? "Hi! I'm Mustafa, welcome to my portfolio." : avatarDialogue} 
                     />
                 </div>
             </motion.div>
@@ -321,24 +321,24 @@ export default function PixelPilotPortfolio() {
                     />
 
                     {/* Main Content - Split Layout */}
-                    <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
-                        <div className="grid md:grid-cols-2 gap-12 items-center">
-                            {/* Left Side - Avatar Frame (stays visible) */}
+                    <div className="relative z-20 w-full max-w-3xl mx-auto px-6 md:px-12 lg:px-20">
+                        <div className="flex flex-col items-center justify-center text-center space-y-8">
+                            {/* Centered Avatar Frame */}
                             <motion.div
-                                initial={{ opacity: 0, x: -50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="hidden md:flex flex-col items-center justify-center relative"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8 }}
+                                className="flex flex-col items-center justify-center relative"
                             >
-                                {/* Pixel Art Frame - Always visible */}
                                 <div className="relative">
-                                    {/* Pixel border effect */}
-                                    <div className="absolute -inset-4 border-4 border-cyan-500/30" style={{
-                                        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-                                        boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1)'
-                                    }}></div>
+                                    <div
+                                        className="absolute -inset-4 border-4 border-cyan-500/30"
+                                        style={{
+                                            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+                                            boxShadow: 'inset 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1)'
+                                        }}
+                                    ></div>
                                     <div className="relative bg-slate-900/50 backdrop-blur-sm p-8 border-4 border-cyan-500/50">
-                                        {/* Pixel dots decoration */}
                                         <div className="absolute -top-2 -left-2 w-4 h-4 bg-cyan-400"></div>
                                         <div className="absolute -top-2 -right-2 w-4 h-4 bg-cyan-400"></div>
                                         <div className="absolute -bottom-2 -left-2 w-4 h-4 bg-cyan-400"></div>
@@ -350,138 +350,33 @@ export default function PixelPilotPortfolio() {
                                         </div>
                                     </div>
                                 </div>
-                                
-                                {/* Scroll Indicator Below Avatar Frame */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 1.2 }}
-                                    className="mt-8 flex flex-col items-center gap-3"
-                                >
-                                    <motion.button
-                                        animate={{ y: [0, 8, 0] }}
-                                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                                        onClick={() => scrollToSection('hero')}
-                                        className="flex flex-col items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer group"
-                                        aria-label="Scroll to next section"
-                                    >
-                                        <span className="text-sm font-mono tracking-widest uppercase font-bold">SCROLL</span>
-                                        <motion.div
-                                            animate={{ y: [0, 4, 0] }}
-                                            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                                        >
-                                            <ChevronDown size={24} className="group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" aria-hidden="true" />
-                                        </motion.div>
-                                        <div className="w-1 h-10 bg-gradient-to-b from-cyan-500 to-transparent"></div>
-                                    </motion.button>
-                                </motion.div>
                             </motion.div>
 
-                            {/* Right Side - Text Content */}
+                            {/* Scroll Prompt */}
                             <motion.div
-                                initial={{ opacity: 0, x: 50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.8, delay: 0.4 }}
-                                className="text-center md:text-left space-y-6"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: 0.5 }}
+                                className="flex flex-col items-center gap-3"
                             >
-                                {/* Pixel Art Badge */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.6 }}
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/10 border-2 border-cyan-500/50 backdrop-blur-sm"
-                                    style={{
-                                        boxShadow: 'inset 0 0 10px rgba(6, 182, 212, 0.2), 0 0 20px rgba(6, 182, 212, 0.1)'
-                                    }}
+                                <span className="text-sm font-mono tracking-widest uppercase text-cyan-300">Scroll to Move</span>
+                                <motion.button
+                                    animate={{ y: [0, 8, 0] }}
+                                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                                    onClick={() => scrollToSection('hero')}
+                                    className="flex flex-col items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer group"
+                                    aria-label="Scroll to next section"
                                 >
-                                    <div className="w-3 h-3 bg-cyan-400" style={{ imageRendering: 'pixelated' }}></div>
-                                    <span className="text-cyan-400 text-sm font-mono tracking-wider">AVAILABLE FOR OPPORTUNITIES</span>
-                                </motion.div>
-
-                                {/* Main Heading with Pixel Art Style */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, delay: 0.8 }}
-                                    className="space-y-4"
-                                >
-                                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight">
-                                        <span className="block text-slate-100 mb-2">Hi, I'm</span>
-                                        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 animate-gradient">
-                                            Mustafa Kamran
-                                        </span>
-                                    </h1>
-                                    <div className="flex items-center gap-3 justify-center md:justify-start">
-                                        <div className="h-1 w-12 bg-cyan-500"></div>
-                                        <h2 className="text-2xl md:text-3xl text-cyan-300 font-mono">Software Engineer</h2>
-                                        <div className="h-1 w-12 bg-cyan-500"></div>
-                                    </div>
-                                </motion.div>
-
-                                {/* Description */}
-                                <motion.p
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.8, delay: 1 }}
-                                    className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-xl mx-auto md:mx-0"
-                                >
-                                    Final-year CS student building scalable backend systems with AI. 
-                                    <span className="text-cyan-400 font-semibold"> Crafting automation workflows</span> that save hours for real teams.
-                                </motion.p>
-
-                                {/* CTA Buttons with Pixel Art Style */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 1.2 }}
-                                    className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-4"
-                                >
-                                    <motion.button
-                                        whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(6, 182, 212, 0.5)' }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => scrollToSection('hero')}
-                                        className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 font-bold border-2 border-cyan-400 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 transition-all flex items-center gap-2"
-                                        style={{ imageRendering: 'pixelated' }}
-                                        aria-label="Explore portfolio"
+                                    <motion.div
+                                        animate={{ y: [0, 4, 0] }}
+                                        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
                                     >
-                                        <span>EXPLORE</span>
-                                        <ChevronDown size={18} aria-hidden="true" />
-                                    </motion.button>
-                                    <motion.a
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        href="mailto:mmustafakamran@gmail.com"
-                                        className="px-8 py-4 border-2 border-cyan-500/50 text-cyan-400 font-bold hover:bg-cyan-500/10 transition-all flex items-center gap-2 backdrop-blur-sm"
-                                        style={{ imageRendering: 'pixelated' }}
-                                        aria-label="Send email"
-                                    >
-                                        <Mail size={18} aria-hidden="true" />
-                                        <span>GET IN TOUCH</span>
-                                    </motion.a>
-                                </motion.div>
-
-                                {/* Tech Stack with Pixel Style */}
-                        <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.8, delay: 1.4 }}
-                                    className="flex flex-wrap items-center justify-center md:justify-start gap-2 pt-6"
-                                >
-                                    {['React', 'TypeScript', 'Python', 'AI/LLMs'].map((tech, i) => (
-                                        <motion.span
-                                            key={tech}
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: 1.6 + i * 0.1 }}
-                                            className="px-3 py-1.5 bg-slate-900/70 border-2 border-slate-700 text-xs font-mono text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
-                                            style={{ imageRendering: 'pixelated' }}
-                                        >
-                                            {tech}
-                                        </motion.span>
-                                    ))}
-                                </motion.div>
-                        </motion.div>
-                    </div>
+                                        <ChevronDown size={24} className="group-hover:text-cyan-300 transition-colors drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]" aria-hidden="true" />
+                                    </motion.div>
+                                    <div className="w-1 h-10 bg-gradient-to-b from-cyan-500 to-transparent"></div>
+                                </motion.button>
+                            </motion.div>
+                        </div>
                     </div>
 
                 </section>

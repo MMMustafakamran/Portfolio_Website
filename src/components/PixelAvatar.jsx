@@ -140,14 +140,15 @@ const PixelAvatar = ({ state, dialogue }) => {
     );
 
     const SpeechBubble = ({ text }) => (
-        <div className="absolute top-2 left-[80%] min-w-[80px] max-w-[90px]">
-            <div className="relative bg-slate-900/90 text-slate-100 px-3 py-2.5 rounded-xl border border-cyan-500/60 shadow-[0_6px_20px_rgba(0,0,0,0.35)] font-mono text-[9px] leading-snug">
+        <div className="absolute top-2 left-[82%]">
+            <div className="relative bg-slate-900/90 text-slate-100 px-3 py-2.5 rounded-xl border border-cyan-500/60 shadow-[0_6px_20px_rgba(0,0,0,0.35)] font-mono text-[9px] leading-snug flex items-center gap-2 min-w-[120px] max-w-[160px]">
+                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
                 {text}
                 {/* Tail pointing from avatar to bubble (attached) */}
                 <div
                     className="absolute top-1/2 -translate-y-1/2 -left-3"
                     style={{
-                        width: 0,
+                        width: 0,   
                         height: 0,
                         borderTop: '6px solid transparent',
                         borderBottom: '6px solid transparent',
